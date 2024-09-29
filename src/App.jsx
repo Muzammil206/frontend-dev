@@ -1,6 +1,7 @@
 import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import Login from "./Pages/Login";
+import 'font-awesome/css/font-awesome.min.css';
 
 function App() {
   return (
