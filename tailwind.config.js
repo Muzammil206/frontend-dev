@@ -6,8 +6,8 @@ export default {
       colors: {
         primaryColor: "#1D1D1D",
         textColor: "#191D23",
-        textHover: '#09296A',
-        titleColor: '#1A202C'
+        textHover: "#09296A",
+        titleColor: "#1A202C",
       },
       fontFamily: {
         sans: ["ui-sans-serif", "system-ui"],
@@ -16,6 +16,11 @@ export default {
         display: ["Oswald"],
         body: ['"Open Sans"'],
         Jakarta: ["Plus Jakarta Sans", "sans-serif"],
+        Roboto: ["Roboto", "sans-serif"],
+        Lexend: ["Lexend Deca", "sans-serif"],
+        Poppins: ["Poppins", "sans-serif"],
+        Inter: ["Inter", "sans-serif"],
+        Nunito: ["Nunito", "sans-serif"],
       },
     },
   },

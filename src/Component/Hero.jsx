@@ -4,7 +4,7 @@ import H1 from "../Elements/H1";
 
 export const Hero = () => {
   return (
-    <div className="px-20 bg-[#F4F4F4] flex justify-between items-center pb-[5rem] pt-[10rem]">
+    <div className="px-20 bg-[#F4F4F4] flex md:flex-row flex-col justify-between items-center pb-[5rem] pt-[10rem]">
       <div className="w-[55%] flex flex-col gap-10">
         <H1 otherStyle={'leading-[55.75px'}>EMPOWER YOUR LEARNING JOURNEY</H1>
         <P otherStyles={""}>
@@ -15,7 +15,7 @@ export const Hero = () => {
         <div className="search flex items-center  border-black border-[1px] w-max py-0.5 rounded-full gap-4 pl-4">
           <i className="fa fa-search text-2xl" aria-hidden="true"></i>
           <input
-            className="text-xl h-14 outline-none md:w-80"
+            className="text-xl h-14 outline-none md:w-80 bg-[#F4F4F4]"
             type="text"
             placeholder="What do you want to learn"
             name=""
