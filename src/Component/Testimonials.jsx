@@ -9,7 +9,9 @@ const Testimonials = () => {
       <SECTION>
         <H1 otherStyle={"font-Rubik text-[#486284]"}>TESTIMONIALS</H1>
         <p className="text-xl">See what users are saying about us</p>
-        <div>
+        <div className="flex bg-[#D3DCE7]">
+          <TestimonialCard />
+          <TestimonialCard />
           <TestimonialCard />
         </div>
       </SECTION>
