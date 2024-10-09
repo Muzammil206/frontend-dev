@@ -24,9 +24,12 @@ const Nav = () => {
         <p className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover">
           Courses
         </p>
-        <p className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover">
+        <Link
+          to={"/about"}
+          className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover"
+        >
           About Us
-        </p>
+        </Link>
         <p className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover">
           Contact Us
         </p>
