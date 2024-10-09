@@ -22,6 +22,7 @@ export default {
         Inter: ["Inter", "sans-serif"],
         Nunito: ["Nunito", "sans-serif"],
         Rubik: ["Rubik", "sans-serif"],
+        Lato: ["Lato", "sans-serif"],
       },
     },
   },
