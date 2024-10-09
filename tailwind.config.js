@@ -23,6 +23,7 @@ export default {
         Nunito: ["Nunito", "sans-serif"],
         Rubik: ["Rubik", "sans-serif"],
         Lato: ["Lato", "sans-serif"],
+        Vietnam: ["Be Vietnam Pro", "sans-serif"],
       },
     },
   },
