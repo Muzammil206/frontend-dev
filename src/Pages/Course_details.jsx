@@ -15,8 +15,10 @@ const Course_details = () => {
         <div className="relative w-max pt-[4rem]">
           <video
             className=" shadow-lg w-4/5 m-auto h-[42.75rem] rounded-lg"
-            src=""
-          ></video>
+            controls
+          >
+            <source src="..Videos/video1.mp4" type="video/mp4" />
+          </video>
         </div>
         <PriceInfo />
       </section>

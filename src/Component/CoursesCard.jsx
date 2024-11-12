@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const CoursesCard = ({ free, name, title, level, time, date, link }) => {
   return (
@@ -26,9 +27,9 @@ const CoursesCard = ({ free, name, title, level, time, date, link }) => {
         </p>
         <div className="date flex justify-between items-center">
           <p className="font-Lexend">Jan 18, 2024</p>
-          <button className="w-10 h-10 rounded-lg bg-[#464646] flex justify-center items-center">
-            <i class="text-white fa fa-arrow-right" aria-hidden="true"></i>
-          </button>
+          <Link to="course_details" className="w-10 h-10 rounded-lg bg-[#464646] flex justify-center items-center">
+            <i className="text-white fa fa-arrow-right" aria-hidden="true"></i>
+          </Link>
         </div>
       </div>
     </div>
