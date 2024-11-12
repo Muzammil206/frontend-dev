@@ -76,8 +76,11 @@ const Courses = () => {
           your problems
         </p>
         <div className="whatwedo flex gap-[2.25rem] items-center my-8">
-          {whatWedo.map((what) => (
-            <div className="each w-[16.25rem] h-[6.75rem] items-center px-6 py-5 bg-white rounded-lg flex gap-5 ">
+          {whatWedo.map((what, i) => (
+            <div
+              key={i}
+              className="each w-[16.25rem] h-[6.75rem] items-center px-6 py-5 bg-white rounded-lg flex gap-5 "
+            >
               <div
                 className={`img flex justify-center items-center min-w-[3.75rem] min-h-[3.75rem] rounded-2xl ${what.color}`}
               >
