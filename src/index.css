@@ -14,7 +14,7 @@
 @tailwind utilities;
 
 * {
-  @apply p-0 m-0 box-border font-Jakarta font-medium;
+  @apply p-0 m-0 box-border font-Jakarta font-medium transition-all duration-300 ease-out;
 }
 
 @media (min-width: 1024px) and (max-width: 1400px) {
