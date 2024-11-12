@@ -35,13 +35,17 @@ const AboutPage = () => {
         </div>
         <div className="bg-[#DDE0E4] px-[3.875rem] py-2 rounded-lg flex justify-between items-center md:flex-row flex-col">
           <div className=" py-[4.5rem] bg-[url(/SVGs/aboutbg.svg)] bg-no-repeat bg-contain bg-right flex flex-col gap-5">
-            <h1 className="text-4xl font-Vietnam font-semibold">Together, let's shape the future of digital innovation</h1>
+            <h1 className="text-4xl font-Vietnam font-semibold">
+              Together, let's shape the future of digital innovation
+            </h1>
             <p className="font-Vietnam text-[#4C4C4D]">
               Join us on this exciting learning journey and unlock your
               potential in design and development.
             </p>
           </div>
-          <button className="px-5 py-3.5 h-[3.125rem] w-[7.5625rem] font-semibold font-Vietnam bg-[#1D1D1D] rounded-lg text-white">Join Now</button>
+          <button className="px-5 py-3.5 h-[3.125rem] w-[7.5625rem] font-semibold font-Vietnam bg-[#1D1D1D] rounded-lg text-white">
+            Join Now
+          </button>
         </div>
       </section>
       <Footer />
