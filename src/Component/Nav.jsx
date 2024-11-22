@@ -21,21 +21,30 @@ const Nav = () => {
         >
           Home
         </Link>
-        <p className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover">
+        <Link
+          to="/solutions"
+          className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover"
+        >
           Solutions
-        </p>
-        <p className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover">
+        </Link>
+        <Link
+          to={"/courses"}
+          className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover"
+        >
           Courses
-        </p>
+        </Link>
         <Link
           to={"/about"}
           className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover"
         >
           About Us
         </Link>
-        <p className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover">
+        <Link
+          to={"/contact-us"}
+          className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover"
+        >
           Contact Us
-        </p>
+        </Link>
       </div>
 
       <div className="right flex items-center gap-8">
@@ -45,9 +54,12 @@ const Nav = () => {
         >
           Login
         </Link>
-        <button className="px-[1rem] py-[0.5rem] rounded-[5px] bg-[#486284] text-white flex justify-center items-center">
+        <Link
+          to={"register"}
+          className="px-[1rem] py-[0.5rem] rounded-[5px] bg-[#486284] text-white flex justify-center items-center"
+        >
           Register
-        </button>
+        </Link>
       </div>
     </nav>
   );
