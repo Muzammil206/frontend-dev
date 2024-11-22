@@ -87,7 +87,7 @@ const Course_details = () => {
           </div>
         </div>
       </section>
-      <section className="px-20 bg-[#F4F4F4] flex flex-col gap-16 pb-[5rem] pt-[10rem]">
+      <section className="lg:px-20 px-6 bg-[#F4F4F4] flex flex-col gap-16 pb-[5rem] pt-[10rem]">
         <header className="font-Poppins flex justify-between items-center">
           <h1 className="font-medium text-3xl">Related courses</h1>
           <Link className="text-xl font-bold text-[#49BBBD]" to="/courses">
