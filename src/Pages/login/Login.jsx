@@ -1,8 +1,12 @@
 import React from "react";
-import Nav from "../Component/Nav";
-import Footer from "../Component/Footer";
-import Loginimg from '../assets/login.png'
+import Nav from "../../Component/Nav";
+import Footer from "../../Component/Footer";
+import Loginimg from '../../assets/login.png'
 import { Link } from "react-router-dom";
+import { IoEyeOutline } from "react-icons/io5";
+import { IoEyeOffOutline } from "react-icons/io5";
+import Google from '../../assets/google.png'
+import './login.css'
 
 const Login = () => {
   return (
@@ -43,6 +47,13 @@ const Login = () => {
               <button className="bg-[#464646] rounded-lg w-full text-white py-2" type="submit">Login</button>
             </div>
           </form>
+          <div className="flex items-center justify-center mt-4"><p className="with relative p-2 bg-[#F4F5F7] text-[14px] text-[#999DA3] font-Nunito">Or login with</p></div>
+          <div className="flex items-center justify-center mt-2">
+            <button className="text-[#4B5768] flex items-center gap-2 bg-[#E4E7EB] py-2 px-6 rounded-md">
+            <img src={Google} alt="" />
+            Continue with Google
+            </button>
+          </div>
         </div>
       </section>
       {/* <Footer /> */}
