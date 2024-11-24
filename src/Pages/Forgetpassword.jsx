@@ -3,7 +3,6 @@ import Nav from '../Component/Nav'
 import Loginimg from '../assets/login.png'
 import { Link } from 'react-router-dom'
 
-
 const Forgetpassword = () => {
   return (
     <div className='h-screen overflow-hidden'>
