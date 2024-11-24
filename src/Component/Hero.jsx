@@ -4,7 +4,7 @@ import H1 from "../Elements/H1";
 
 export const Hero = () => {
   return (
-    <div className="px-20 bg-[#F4F4F4] flex md:flex-row flex-col justify-between items-center pb-[5rem] pt-[10rem]">
+    <div className="md:px-20 px-6 bg-[#F4F4F4] flex md:flex-row flex-col justify-between items-center pb-[5rem] pt-[10rem]">
       <div className="w-[55%] flex flex-col gap-10">
         <H1 otherStyle={"leading-[55.75px"}>EMPOWER YOUR LEARNING JOURNEY</H1>
         <P otherStyles={""}>
