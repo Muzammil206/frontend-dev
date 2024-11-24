@@ -10,6 +10,7 @@ import Course_details from "./Pages/Course_details";
 import StudentDashboard from "./Pages/StudentDashboard";
 import SolutionPage from "./Pages/SolutionPage";
 import ContactUSPage from "./Pages/ContactUSPage";
+import Forgetpassword from "./Pages/Forgetpassword";
 function App() {
   return (
     <div className="">
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgetpassword" element={<Forgetpassword />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/course_details" element={<Course_details />} />
           <Route path="/dashboard" element={<StudentDashboard />} />
