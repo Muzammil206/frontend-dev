@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Nav from "../../Component/Nav";
 import Footer from "../../Component/Footer";
 import Loginimg from '../../assets/login.png'
@@ -7,8 +7,14 @@ import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
 import Google from '../../assets/google.png'
 import './login.css'
+import { faQ } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
+  const [ showPassword, setShowPassword ] = useState(false)
+  const handleShowPassword = () =>{
+    setShowPassword(!showPassword)
+  }
+  
   return (
     <div className="overflow-hidden">
       <Nav />
@@ -28,12 +34,17 @@ const Login = () => {
                 className="p-[.4rem] border-[1px] border-[#D0D5DD] outline-none w-full rounded-lg"
                 type="text" />
               </div>
-              <div>
+              <div className="relative">
                 <label className="text-[18px] font-Nunito font-[500]" htmlFor="">Password</label> <br />
                 <input 
                 placeholder="Enter your email"
                 className="p-[.4rem] border-[1px] border-[#D0D5DD] outline-none w-full rounded-lg"
-                type="password" />
+                type={showPassword ? 'text': 'password'} />
+                <span className="">
+                  {showPassword ? <IoEyeOutline onClick={handleShowPassword} className="absolute right-4 bottom-2 text-[1.4rem] text-[#999DA3] cursor-pointer"/>:
+                  <IoEyeOffOutline onClick={handleShowPassword} className="absolute right-4 bottom-2 text-[1.4rem] text-[#999DA3] cursor-pointer"/>
+                  }
+                </span>
               </div>
             </div>
             <div className="flex items-center justify-between my-4">
@@ -48,7 +59,7 @@ const Login = () => {
             </div>
           </form>
           <div className="flex items-center justify-center mt-4"><p className="with relative p-2 bg-[#F4F5F7] text-[14px] text-[#999DA3] font-Nunito">Or login with</p></div>
-          <div className="flex items-center justify-center mt-2">
+          <div className="flex items-center justify-center mt-4">
             <button className="text-[#4B5768] flex items-center gap-2 bg-[#E4E7EB] py-2 px-6 rounded-md">
             <img src={Google} alt="" />
             Continue with Google
