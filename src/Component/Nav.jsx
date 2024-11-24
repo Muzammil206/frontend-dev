@@ -55,7 +55,7 @@ const Nav = () => {
           Login
         </Link>
         <Link
-          to={"register"}
+          to={"/register"}
           className="px-[1rem] py-[0.5rem] rounded-[5px] bg-[#486284] text-white flex justify-center items-center"
         >
           Register
