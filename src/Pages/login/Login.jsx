@@ -9,6 +9,10 @@ import Google from '../../assets/google.png'
 import './login.css'
 
 const Login = () => {
+  const [ showPassword, setShowPassword ] = useState(false)
+  const handleShowPassword = () => {
+      setShowPassword(!showPassword);
+  };
   return (
     <div className="overflow-hidden">
       <Nav />
@@ -33,7 +37,10 @@ const Login = () => {
                 <input 
                 placeholder="Enter your email"
                 className="p-[.4rem] border-[1px] border-[#D0D5DD] outline-none w-full rounded-lg"
-                type="password" />
+                type={showPassword ? 'text' : 'password'} />
+                <span>{showPassword ? <IoEyeOutline onClick={handleShowPassword} className='absolute bottom-2 right-4 text-[1.4rem] text-[#999DA3] cursor-pointer'/>:
+                    <IoEyeOffOutline onClick={handleShowPassword} className='absolute bottom-2 right-4 text-[1.4rem] text-[#999DA3] cursor-pointer'/>}
+                </span>
               </div>
             </div>
             <div className="flex items-center justify-between my-4">

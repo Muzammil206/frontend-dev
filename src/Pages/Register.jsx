@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Nav from '../Component/Nav'
 import { Link } from 'react-router-dom'
 import './login/login.css'
@@ -6,7 +6,13 @@ import Loginimg from '../assets/login.png'
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
 import Google from '../assets/google.png'
+
 const Register = () => {
+    const [ showPassword, setShowPassword ] = useState(false)
+    const handleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
   return (
     <div>
         <Nav />
@@ -33,12 +39,15 @@ const Register = () => {
                 className="p-[.4rem] border-[1px] border-[#D0D5DD] outline-none w-full rounded-lg"
                 type="text" />
               </div>
-              <div>
+              <div className='relative'>
                 <label className="text-[18px] font-Nunito font-[500]" htmlFor="">Password</label> <br />
                 <input 
                 placeholder="Enter your email"
                 className="p-[.4rem] border-[1px] border-[#D0D5DD] outline-none w-full rounded-lg"
-                type="password" />
+                type={showPassword ? 'text' : 'password'} />
+                <span>{showPassword ? <IoEyeOutline onClick={handleShowPassword} className='absolute bottom-2 right-4 text-[1.4rem] text-[#999DA3] cursor-pointer'/>:
+                    <IoEyeOffOutline onClick={handleShowPassword} className='absolute bottom-2 right-4 text-[1.4rem] text-[#999DA3] cursor-pointer'/>
+                }</span>
               </div>
             </div>
             <div className="flex items-center justify-between my-4">
