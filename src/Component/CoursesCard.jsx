@@ -27,7 +27,7 @@ const CoursesCard = ({ free, name, title, level, time, date, link }) => {
         </p>
         <div className="date flex justify-between items-center">
           <p className="font-Lexend">Jan 18, 2024</p>
-          <Link to="course_details" className="w-10 h-10 rounded-lg bg-[#464646] flex justify-center items-center">
+          <Link to="/course_details" className="w-10 h-10 rounded-lg bg-[#464646] flex justify-center items-center">
             <i className="text-white fa fa-arrow-right" aria-hidden="true"></i>
           </Link>
         </div>
