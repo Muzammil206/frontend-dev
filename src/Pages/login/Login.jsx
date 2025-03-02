@@ -16,12 +16,12 @@ const Login = () => {
   return (
     <div className="overflow-hidden">
       <Nav />
-      <section className="flex gap-10 mt-[5.2406rem] p-8">
-        <div className="bg-[#f1f1f3] w-3/6 flex items-center justify-center"><img className="" src={Loginimg} alt="" /></div>
-        <div className="w-3/6 px-8 pb-8">
+      <section className="flex justify-center gap-10 mt-[5.2406rem] pt-8 sm:p-8">
+        <div className="w-3/6 hidden md:flex items-center justify-center"><img className="" src={Loginimg} alt="" /></div>
+        <div className="w-full sm:w-5/6 md:w-3/6 px-8 pb-8">
           <div className="flex items-center justify-center gap-4 flex-col">
-            <p className="text-[32px] font-[500]">Welcome to Hoistlfick!</p>
-            <p className="text-[28px] mb-10">Login to account</p>
+            <p className="text-[20px] sm:text-[32px] font-[500]">Welcome to Hoistlfick!</p>
+            <p className="text-[20px] sm:text-[28px] mb-10">Login to account</p>
           </div>
           <form action="">
             <div className="flex flex-col gap-6">
@@ -29,29 +29,31 @@ const Login = () => {
                 <label className="text-[18px] font-Nunito font-[500]" htmlFor="">Email Address</label> <br />
                 <input 
                 placeholder="Enter your email"
-                className="p-[.4rem] border-[1px] border-[#D0D5DD] outline-none w-full rounded-lg"
+                className="p-4 h-[48px] border-[1px] border-[#D0D5DD] outline-none w-full rounded-lg"
                 type="text" />
               </div>
-              <div>
+              <div className="relative">
                 <label className="text-[18px] font-Nunito font-[500]" htmlFor="">Password</label> <br />
                 <input 
                 placeholder="Enter your email"
-                className="p-[.4rem] border-[1px] border-[#D0D5DD] outline-none w-full rounded-lg"
+                className="p-4 h-[48px] border-[1px] border-[#D0D5DD] outline-none w-full rounded-lg"
                 type={showPassword ? 'text' : 'password'} />
                 <span>{showPassword ? <IoEyeOutline onClick={handleShowPassword} className='absolute bottom-2 right-4 text-[1.4rem] text-[#999DA3] cursor-pointer'/>:
                     <IoEyeOffOutline onClick={handleShowPassword} className='absolute bottom-2 right-4 text-[1.4rem] text-[#999DA3] cursor-pointer'/>}
                 </span>
               </div>
             </div>
-            <div className="flex items-center justify-between my-4">
+            <div className="flex items-center justify-between w-full my-4">
               <div className="flex items-center gap-2">
                 <input type="checkbox" />
-                <span>Remember me</span>
+                <span className="text-[9px] sm:text-[12px]">Remember me</span>
               </div>
-              <Link>Forget Password ?</Link>
+              <Link 
+              className="text-[9px] sm:text-[12px]"
+              to='/forgetpassword'>Forget Password ?</Link>
             </div>
             <div className="flex items-center justify-center">
-              <button className="bg-[#464646] rounded-lg w-full text-white py-2" type="submit">Login</button>
+              <button className="bg-[#0056D2] h-[48px] rounded-lg w-full text-white py-2" type="submit">Login</button>
             </div>
           </form>
           <div className="flex items-center justify-center mt-4"><p className="with relative p-2 bg-[#F4F5F7] text-[14px] text-[#999DA3] font-Nunito">Or login with</p></div>
