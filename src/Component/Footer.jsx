@@ -28,7 +28,7 @@ const Footer = () => {
     ],
   ];
   return (
-    <footer className="py-[6.25rem] lg:px-20 px-[1.25rem] border-t-[1px] border-t-black/5 bg-[#D3DCE7] flex flex-col gap-9">
+    <footer className="py-[6.25rem] lg:px-20 px-[1.25rem] border-t-[1px] border-t-black/5 bg-[#041D41] flex flex-col gap-9 text-white">
       <div className="md:flex grid grid-cols-1 gap-8 justify-between items-start">
         <div className="flex flex-col gap-[1.875rem]">
           <img src="/image/logo.svg" className="mb-1.5" alt="" />
@@ -63,10 +63,10 @@ const Footer = () => {
         </div>
       </div>
       <div className="flex justify-between items-center border-t-[1px] border-t-black/30 pt-8">
-        <p className="text-titleColor">©2022 Hoistflick. All rights reserved</p>
+        <p className="text-white">©2022 Hoistflick. All rights reserved</p>
         <div className="flex md:gap-14">
-          <p className="text-titleColor">Privacy & Policy</p>
-          <p className="text-titleColor">Terms & Condition</p>
+          <p className="text-white">Privacy & Policy</p>
+          <p className="text-white">Terms & Condition</p>
         </div>
       </div>
     </footer>

@@ -1,23 +1,16 @@
 import React from "react";
 
-const TestimonialCard = () => {
+const TestimonialCard = ({ desc, name, occupaction, img }) => {
   return (
-    <div className="bg-[#D3DCE7] flex flex-col lg:w-[26.25rem] gap-9 p-6 rounded-lg">
-      <header className="side flex gap-6 items-center">
-          <img src="/SVGs/circ.svg" alt="" />
-          <div className="title flex flex-col">
-            <h2 className="font-Rubik text-[#486284] font-bold text-xl">
-              Viezh Robert
-            </h2>
-            <p className="font-Rubik text-[#486284]">Warsaw, Poland</p>
-          </div>
-          <span className="flex"></span>
-          <div className="rate">4.5</div>
-      </header>
-      <div className="font-Rubik text-[#486284]">
-        “Wow... I am very happy to use this VPN, it turned out to be more than
-        my expectations and so far there have been no problems. LaslesVPN always
-        the best”.
+    <div className="border-[#D9D9D9] border-[1px] flex flex-col lg:w-[36.5625rem] gap-6 p-6 rounded-lg bg-[#F8F8F8]">
+      <p className="desc font-Poppins font-semibold">{desc}</p>
+      <div className="flex items-center gap-3">
+        <img src={img} className="w-10 h-10 rounded-full" alt="" />
+        <h1 className="text-[#757575]">
+          {name}
+          <br />
+          <span className="text-[#B3B3B3]">{occupaction}</span>
+        </h1>
       </div>
     </div>
   );

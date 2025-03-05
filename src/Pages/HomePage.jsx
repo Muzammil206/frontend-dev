@@ -4,7 +4,6 @@ import { Hero } from "../Component/Hero";
 import WhyChooseUs from "../Elements/WhyChooseUs";
 import Courses from "../Component/Courses";
 import Testimonials from "../Component/Testimonials";
-import ShareExpertise from "../Component/ShareExpertise";
 import Footer from "../Component/Footer";
 
 const HomePage = () => {
@@ -15,7 +14,6 @@ const HomePage = () => {
       <WhyChooseUs />
       <Courses />
       <Testimonials />
-      <ShareExpertise />
       <Footer />
     </div>
   );
