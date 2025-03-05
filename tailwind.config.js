@@ -8,6 +8,7 @@ export default {
         textColor: "#191D23",
         textHover: "#09296A",
         titleColor: "#1A202C",
+        primaryBlue: "#0056D2",
       },
       fontFamily: {
         sans: ["ui-sans-serif", "system-ui"],

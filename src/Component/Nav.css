@@ -1,0 +1,20 @@
+.hamburger {
+    @apply md:hidden flex flex-col gap-2 w-10 justify-center items-center;
+  }
+  .hamburger div {
+    @apply w-9 h-[4px] opacity-70 rotate-[360deg];
+  }
+  
+  .ActiveBurger div {
+    @apply absolute origin-center;
+  }
+  .ActiveBurger div:first-child {
+    @apply rotate-[135deg];
+  }
+  .ActiveBurger div:last-child {
+    @apply rotate-[-135deg];
+  }
+  .ActiveBurger div:nth-child(2) {
+    @apply hidden;
+  }
+  
