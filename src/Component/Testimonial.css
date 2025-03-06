@@ -1,0 +1,35 @@
+.portfolio-carousel .slick-current {
+    opacity: 1;
+    transform: scale(1);
+    /* width: 50rem; */
+  }
+  
+  .portfolio-carousel .slick-slide {
+    opacity: 0.5;
+    filter: blur(3px);
+    transition: all 0.3s ease;
+  }
+  
+  .portfolio-carousel .slick-slide.slick-active {
+    opacity: 1;
+    filter: blur(0);
+  }
+  
+  .portfolio-carousel .slick-slide.slick-active + .slick-slide {
+    opacity: 0.5;
+    filter: blur(3px);
+  }
+  
+  .portfolio-carousel .slick-prev, .portfolio-carousel .slick-next {
+    top: 50%;
+    /* transform: translateY(-50%); */
+  }
+  
+
+  .slick-dots li button:before {
+    @apply text-[#6e6e69] font-black md:text-[18px] text-[5px] 
+  }
+  
+  .slick-dots li.slick-active button:before {
+    color: #FFCC00;
+  }

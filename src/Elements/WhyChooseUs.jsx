@@ -7,7 +7,7 @@ import LearnMoreBtn from "../Component/LearnMoreBtn";
 const WhyChooseUs = () => {
   return (
     <div className="">
-      <SECTION otherStyle={""}>
+      {/* <SECTION otherStyle={""}>
         <H2 otherStyles={"font-medium text-black"}>Why choose us</H2>
         <div className="bg-[url(/SVGs/shape.svg)] bg-repeat bg-primaryBlue rounded-lg lg:w-[80%]">
           <div className="py-[3.5625rem] px-8 grid grid-cols-3 gap-6 bg-black/20 backdrop-blur-sm">
@@ -57,10 +57,11 @@ const WhyChooseUs = () => {
             </div>
           </div>
         </div>
-      </SECTION>
+      </SECTION> */}
+
       <SECTION otherStyle={"bg-[#252641]"}>
         <H2 otherStyles={"font-medium text-white"}>Category</H2>
-        <div className="flex gap-[2.8125rem] flex-wrap justify-center items-center">
+        <div className="flex md:gap-[2.8125rem] gap-6 flex-wrap justify-center items-center">
           <CategoryCard />
           <CategoryCard />
           <CategoryCard />
