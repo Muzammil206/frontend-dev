@@ -2,10 +2,10 @@ import React from "react";
 
 const Search = () => {
   return (
-    <div className="search flex items-center w-max py-0.5 rounded gap-4 pl-4 bg-[#F5FAFF]">
+    <div className="search flex items-center w-max py-0.5 rounded gap-4 pl-4 bg-[#F5FAFF] md:mt-0 mt-10">
       <i className="fa fa-search text-2xl font-[100]" aria-hidden="true"></i>
       <input
-        className="h-full outline-none md:w-80 font-Roboto"
+        className="h-full outline-none md:w-80 font-Roboto bg-transparent"
         type="text"
         placeholder="What do you want to learn"
         name=""
