@@ -23,17 +23,24 @@ const Nav = () => {
         </Link>
         <Link
           onClick={() => setHamBurger(!hamBurger)}
-          to="/solutions"
-          className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover"
-        >
-          Solutions
-        </Link>
-        <Link
-          onClick={() => setHamBurger(!hamBurger)}
           to={"/courses"}
           className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover"
         >
           Courses
+        </Link>
+        <Link
+          onClick={() => setHamBurger(!hamBurger)}
+          to="/programs"
+          className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover"
+        >
+          Programs
+        </Link>
+        <Link
+          onClick={() => setHamBurger(!hamBurger)}
+          to="/resources"
+          className="p-[1rem] hover:font-bold text-titleColor hover:text-textHover"
+        >
+          Resources
         </Link>
         <Link
           onClick={() => setHamBurger(!hamBurger)}
