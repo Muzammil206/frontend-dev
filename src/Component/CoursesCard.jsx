@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const CoursesCard = ({ free, name, title, level, time, date, link }) => {
   return (
-    <div className="md:min-w-[22.0625rem] md:w-[22rem] min-w-[11.665rem] w-[11.665rem] flex flex-col border-[#D9D9D9] border-2 rounded-lg">
+    <div className="md:min-w-[22.0625rem] md:w-[22rem] min-w-[11.665rem] w-full flex flex-col border-[#D9D9D9] border-2 rounded-lg">
       <div className="top flex justify-end items-start md:p-6 p-5 bg-[#F1F3F7] h-[12.5rem]">
         <p className="free text-sm font-extrabold p-1 px-3 rounded flex justify-center items-center bg-white shadow-sm">
           Free
