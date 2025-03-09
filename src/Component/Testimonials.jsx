@@ -57,13 +57,6 @@ const Testimonials = () => {
             <TestimonialCard key={i} {...test} />
           ))}
         </div>
-        {/* <div className="flex flex-col gap-[4.1875rem] h-[35rem] justify-start">
-          <Slider {...settings}>
-            {Testimonials.map((test, i) => (
-              <TestimonialCard key={i} {...test} />
-            ))}
-          </Slider>
-        </div> */}
       </SECTION>
       <div className="md:p-20 p-10 pt-10 bg-white flex md:flex-row flex-col md:justify-between justify-center items-center md:gap-0 gap-5">
         <div className="flex">
