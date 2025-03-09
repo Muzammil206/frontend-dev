@@ -7,10 +7,11 @@ import AboutPage from "./Pages/AboutPage";
 import ScrollToTop from "./Utilities/ScrollToTop";
 import Course_details from "./Pages/Course_details";
 import StudentDashboard from "./Pages/StudentDashboard";
-import SolutionPage from "./Pages/SolutionPage";
+import Programs from "./Pages/Programs";
 import ContactUSPage from "./Pages/ContactUSPage";
 import Forgetpassword from "./Pages/Forgetpassword";
 import CoursesPage from "./Pages/CoursesPage";
+import Resources from "./Pages/resources/Resources";
 function App() {
   return (
     <div className="">
@@ -25,7 +26,8 @@ function App() {
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/course_details" element={<Course_details />} />
           <Route path="/dashboard" element={<StudentDashboard />} />
-          <Route path="/solutions" element={<SolutionPage />} />
+          <Route path="/programs" element={<Programs />} />
+          <Route path="/resources" element={<Resources />} />
           <Route path="/contact-us" element={<ContactUSPage />} />
         </Routes>
       </Router>

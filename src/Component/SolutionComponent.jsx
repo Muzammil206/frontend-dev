@@ -14,7 +14,7 @@ const SolutionComponent = ({ title, txt, defaultOrder, background }) => {
         <h1 className="font-Roboto font-semibold text-4xl text-primaryColor">
           {title}
         </h1>
-        <p className="text-2xl font-Inter leading-[4.375rem] font-normal">
+        <p className="text-[22px] font-Inter leading-[4.375rem] font-normal">
           {txt}
         </p>
         <button className="bg-white px-10 py-5 font-Inter text-2xl text-black border-[1px] border-black w-max mt-5">
