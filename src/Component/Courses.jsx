@@ -48,7 +48,7 @@ const Courses = () => {
       <SECTION>
         <H1>Featured courses</H1>
         <div className="w-full flex flex-col gap-[2.625rem]">
-          <div className="btns flex justify-around">
+          <div className="btns md:flex hidden justify-around">
             {Btns.map((btn, i) => (
               <button
                 onClick={() => setActivebtn(i)}
@@ -63,7 +63,15 @@ const Courses = () => {
               </button>
             ))}
           </div>
-          <div className="courses grid gap-[6.25rem] lg:grid-cols-3 md:grid-cols-2 grid-cols-1  justify-between w-full ">
+          <select
+            name=""
+            className="md:px-4 md:py-3 py-2 px-[9] border-[#D9D9D9] border-[2px] rounded-lg w-max font-Jakarta"
+            id=""
+          >
+            <option value="">Professional courses</option>
+            <option value="">Design</option>
+          </select>
+          <div className="courses gap-4 flex md:flex-wrap md:overflow-auto overflow-scroll flex-nowrap justify-center w-full">
             <CoursesCard />
             <CoursesCard />
             <CoursesCard />
@@ -77,11 +85,11 @@ const Courses = () => {
       <div className="bg-[url(/SVGs/whatwedobg.svg)] bg-center bg-cover bg-no-repeat">
         <SECTION otherStyle={"gap-[1rem] bg-transparent"}>
           <H1 otherStyle={"font-Nunito text-[#0A033C]"}>What we do</H1>
-          <p className="text-neutral-500 text-2xl">
+          <p className="text-neutral-500 md:text-2xl text-base md:text-start text-center">
             We provide a comprehensive technological solutions tailored to solve
             your problems
           </p>
-          <div className="whatwedo flex gap-10 flex-wrap justify-center items-center my-8">
+          <div className="whatwedo flex md:gap-10 gap-2 flex-wrap justify-center items-center my-8">
             {whatWedo.map((what, i) => (
               <WhatWeDoCard key={i} {...what} />
             ))}
@@ -91,15 +99,15 @@ const Courses = () => {
       </div>
 
       <SECTION>
-        <div className="grid grid-cols-2 md:gap-x-[6.25rem] gap-20 items-center">
-          <img src="/SVGs/Events.svg" alt="" />
-          <div className="flex md:flex-col flex-col gap-8 items-end text-end">
+        <div className="grid md:grid-cols-2 grid-rows-2 md:gap-x-[6.25rem] md:gap-20 items-center">
+          <img className="shadow-sm" src="/SVGs/Events.svg" alt="" />
+          <div className="flex md:flex-col flex-col md:gap-8 gap-3 md:items-end items-center md:text-end text-center md:w-full w-[80%] md:m-0 m-auto">
             <H1>Stay ahead with our exclusive events</H1>
-            <p className="text-[1.125rem] font-Inter font-[400]">
+            <p className="md:text-[1.125rem] text-[10px] font-Inter font-[400]">
               Join interactive workshops, webinars, and bootcamps designed to
               accelerate your growth and connect you with industry experts
             </p>
-            <button className="text-white rounded-xl px-[1rem] py-[12px] bg-primaryBlue font-Roboto w-max mt-2">
+            <button className="text-white rounded-xl px-[1rem] py-[12px] bg-primaryBlue font-Roboto w-max mt-3">
               View Events
             </button>
           </div>
