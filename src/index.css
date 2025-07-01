@@ -22,3 +22,42 @@
     zoom: 90%;
   }
 }
+
+/* Completely hide scrollbar for mobile cards */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+  width: 0;
+  height: 0;
+}
+
+/* Additional scrollbar hiding for all browsers */
+.hide-scrollbar::-webkit-scrollbar-track {
+  display: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar-corner {
+  display: none;
+}
+
+/* Smooth scrolling for mobile cards */
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+/* Ensure smooth scrolling behavior */
+.hide-scrollbar {
+  scroll-behavior: smooth;
+}
