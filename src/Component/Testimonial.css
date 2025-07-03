@@ -33,3 +33,123 @@
   .slick-dots li.slick-active button:before {
     color: #FFCC00;
   }
+
+
+/* Your existing styles */
+.portfolio-carousel {
+  position: relative;
+}
+
+/* Mobile-specific slider styles - Fixed overflow */
+.mobile-testimonial-slider {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+.mobile-testimonial-slider .slick-slide {
+  padding: 0;
+}
+
+.mobile-testimonial-slider .slick-slide > div {
+  padding: 0 8px;
+}
+
+/* Remove center mode effects that cause overflow */
+.mobile-testimonial-slider .slick-center .testimonial-card {
+  transform: none;
+}
+
+.mobile-testimonial-slider .slick-slide .testimonial-card {
+  transform: none;
+  opacity: 1;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Mobile dots styling */
+.mobile-testimonial-slider .slick-dots {
+  bottom: -40px;
+  text-align: center;
+}
+
+.mobile-testimonial-slider .slick-dots li {
+  margin: 0 4px;
+}
+
+.mobile-testimonial-slider .slick-dots li button:before {
+  font-size: 12px;
+  color: #cbd5e0;
+}
+
+.mobile-testimonial-slider .slick-dots li.slick-active button:before {
+  color: #3182ce;
+}
+
+/* Mobile arrow positioning - Fixed */
+.mobile-next-arrow,
+.mobile-prev-arrow {
+  z-index: 10;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mobile-next-arrow {
+  right: 8px;
+}
+
+.mobile-prev-arrow {
+  left: 8px;
+}
+
+.mobile-next-arrow:hover,
+.mobile-prev-arrow:hover {
+  transform: translateY(-50%) scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+/* Testimonial card mobile optimizations - Fixed width */
+@media (max-width: 768px) {
+  .testimonial-card {
+    width: 100% !important;
+    max-width: calc(100vw - 80px) !important;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .mobile-testimonial-slider .slick-list {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .mobile-testimonial-slider .slick-track {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .mobile-testimonial-slider .slick-slide {
+    height: auto;
+  }
+}
+
+/* Ensure no horizontal overflow */
+.mobile-testimonial-slider,
+.mobile-testimonial-slider * {
+  box-sizing: border-box;
+}
+
+/* Hide desktop slider on mobile */
+@media (max-width: 768px) {
+  .desktop-slider {
+    display: none !important;
+  }
+}
+
+/* Hide mobile slider on desktop */
+@media (min-width: 769px) {
+  .mobile-slider {
+    display: none !important;
+  }
+}
