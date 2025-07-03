@@ -3,6 +3,7 @@ import FooterCard from "./FooterCard";
 import { Link } from "react-router-dom";
 import H1 from "../Elements/H1";
 
+
 const Footer = () => {
   const Footerdata = [
     [
@@ -34,14 +35,14 @@ const Footer = () => {
       <footer className="py-[6.25rem] lg:px-20 px-[1.25rem] border-t-[1px] border-t-black/5 bg-[#041D41] md:flex hidden flex-col gap-9 text-white">
         <div className="md:flex grid grid-cols-1 gap-8 justify-between items-start">
           <div className="flex flex-col gap-5 justify-start">
-            <H1 otherStyle="text-white">LOGO</H1>
+            <img src="/SVGs/awibi.svg" className="mb-1.5 w-24 h-24" alt="awibi-logo" />
 
             <p className="w-3/4">
               Our vision is to empower African students and professionals with
               the right skills to thrive in this digital age .
             </p>
             <div className="flex flex-col gap-[1.875rem]">
-              <img src="/image/logo.svg" className="mb-1.5" alt="" />
+              
               <div className="flex gap-5">
                 <img className="w-12 h-12" src="/SVGs/facebook.svg" alt="" />
                 <img className="w-12 h-12" src="/SVGs/x.svg" alt="" />
@@ -58,7 +59,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex justify-between items-center border-t-[1px] border-t-black/30 pt-8">
-          <p className="text-white">©2022 Hoistflick. All rights reserved</p>
+          <p className="text-white">©2025 Hoistflick. All rights reserved</p>
           <div className="flex md:gap-14">
             <p className="text-white">Privacy & Policy</p>
             <p className="text-white">Terms & Condition</p>
