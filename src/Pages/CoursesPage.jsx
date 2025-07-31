@@ -4,7 +4,6 @@ import Nav from "../Component/Nav"
 import Footer from "../Component/Footer"
 import  MostViewedCourses  from "../Component/MostView"
 import CoursesCard from "../Component/CoursesCard"
-// import Coursecd from "../Component/Coursecd"
 import allCourses from "../Component/data"
 
 
