@@ -1,4 +1,4 @@
-"use client"
+// removed 'use client' directive
 
 import { useState, useMemo } from "react"
 

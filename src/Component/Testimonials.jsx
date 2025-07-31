@@ -1,4 +1,4 @@
-"use client"
+// removed 'use client' directive
 
 import { useState } from "react"
 import SECTION from "../Elements/SECTION"
