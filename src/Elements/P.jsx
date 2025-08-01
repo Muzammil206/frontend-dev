@@ -1,11 +1,5 @@
-import React from "react";
+const P = ({ children, otherStyles = "" }) => {
+  return <p className={`text-lg text-gray-600 leading-relaxed ${otherStyles}`}>{children}</p>
+}
 
-const P = ({ otherStyles, children }) => {
-  return (
-    <p className={` ${otherStyles} text-[#1A202C] font-medium text-base`}>
-      {children}
-    </p>
-  );
-};
-
-export default P;
+export default P

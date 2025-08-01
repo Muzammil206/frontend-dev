@@ -1,21 +1,19 @@
-import React from "react";
+import { SearchIcon, ArrowRight } from "lucide-react"
 
 const Search = () => {
   return (
-    <div className="search flex items-center w-max py-0.5 rounded gap-4 pl-4 bg-[#F5FAFF] md:mt-0 mt-10">
-      <i className="fa fa-search text-2xl font-[100]" aria-hidden="true"></i>
+    <div className="flex items-center bg-white rounded-lg shadow-lg p-2 max-w-md w-full">
+      <SearchIcon className="w-5 h-5 text-gray-400 ml-3" />
       <input
-        className="h-full outline-none md:w-80 font-Roboto bg-transparent"
         type="text"
-        placeholder="What do you want to learn"
-        name=""
-        id=""
+        placeholder="what do you want to learn?"
+        className="flex-1 px-4 py-3 outline-none text-gray-700"
       />
-      <button className="text-white rounded-xl px-[1rem] py-[12px] bg-primaryBlue font-Roboto">
-        Continue
+      <button className="bg-[#050829] text-white p-3 rounded-md hover:bg-[#0a0f3d] transition-colors">
+        <ArrowRight className="w-5 h-5" />
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search
