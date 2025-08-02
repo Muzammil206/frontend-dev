@@ -1,6 +1,7 @@
 
 
 import { useState } from "react"
+import { useAuth } from "../../context/auth-context"
 import { Link, useNavigate } from "react-router-dom"
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5"
 import { toast } from "react-hot-toast" 
@@ -10,6 +11,7 @@ import {  Twitter } from "lucide-react"
 
 const Login = () => {
   const navigate = useNavigate() // Initialize useNavigate for redirection
+  const { login } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
@@ -69,8 +71,10 @@ const Login = () => {
 
       if (data.success) {
         toast.success("Login successful! Redirecting...")
-        // You might want to store user token/info here (e.g., in localStorage or context)
-        navigate("/") // Redirect to home or dashboard page
+        // Use AuthContext to set token and user
+        login(data.token, data.user)
+        // Force reload to update Nav immediately
+        window.location.href = "/";
       } else {
         toast.error(data.message || "Login failed. Please check your credentials.")
       }
@@ -172,7 +176,7 @@ const Login = () => {
               className="font-dm-sans group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Signing in..." : "Sign up"}
+              {isSubmitting ? "Signing in..." : "Sign in"}
             </button>
           </div>
         </form>

@@ -107,9 +107,7 @@ const Register = () => {
         {/* Logo and Titles */}
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">A</span>
-            </div>
+            <img src="/SVGs/logo.svg" alt="Awibi Institute Logo" />
             <div className="flex flex-col">
               <span className="font-dm-sans text-xl font-bold leading-tight text-gray-900">Awibi</span>
               <span className="font-dm-sans text-sm text-gray-600 leading-tight">Institute</span>

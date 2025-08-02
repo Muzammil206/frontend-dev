@@ -1,55 +1,62 @@
 import { useState } from "react"
+import { useAuth } from "../context/auth-context"
 import { Link } from "react-router-dom"
 
-const Nav = () => {
+
+const Nav = ({ bg = "#050829" }) => {
   const [hamBurger, setHamBurger] = useState(false)
+  const { isLoggedIn } = useAuth();
 
   return (
     <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-7xl">
-      <div className="bg-[#050829] rounded-2xl px-6 lg:px-8 py-4 flex justify-between items-center shadow-lg backdrop-blur-sm border border-white/10">
+      <div style={{ backgroundColor: bg }} className="rounded-2xl px-6 lg:px-8 py-4 flex justify-between items-center shadow-lg backdrop-blur-sm border border-white/10">
         {/* Logo */}
-        <div className="logo flex items-center gap-2 font-bold text-white">
+        <div className="logo flex items-center gap-2 font-bold" >
           <div className="flex items-center gap-2">
-             <div className="logo flex items-center gap-2 font-bold">
-          <img className="" src="/SVGs/logo.svg" alt="" />
-           </div>
-              <div className="flex flex-col">
-              <span className="text-lg font-bold leading-tight">Awibi</span>
-              <span className="text-xs text-gray-300 leading-tight">Institute</span>
+            <div className="logo flex items-center gap-2 font-bold">
+              <img className="" src="/SVGs/logo.svg" alt="" />
+            </div>
+            <div className="flex flex-col">
+              <span className={`text-lg font-bold leading-tight ${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"}`}>Awibi</span>
+              <span className={`text-xs leading-tight ${bg === "#D7D7D7" ? "text-[#263238]" : "text-gray-300"}`}>Institute</span>
             </div>
           </div>
         </div>
 
         {/* Desktop Navigation Links */}
         <div className="hidden lg:flex items-center gap-[40px] w-[482px] h-[21px]" style={{fontFamily: 'DM Sans'}}> 
-          <Link to="/" className="text-white hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100">
+          <Link to="/" className={`${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100`}>
             Home
           </Link>
-          <Link to="/courses" className="text-white hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100">
+          <Link to="/courses" className={`${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100`}>
             Courses
           </Link>
-          <Link to="/programs" className="text-white hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100">
+          <Link to="/programs" className={`${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100`}>
             Programs
           </Link>
-          <Link to="/resources" className="text-white hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100">
+          <Link to="/resources" className={`${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100`}>
             Resources
           </Link>
-          <Link to="/contact-us" className="text-white hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100">
+          <Link to="/contact-us" className={`${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors text-sm font-medium leading-[21px] opacity-100`}>
             Contact us
           </Link>
         </div>
 
         {/* Desktop Auth Buttons */}
         <div className="hidden lg:flex items-center gap-4">
-          <Link to="/login" className="text-white hover:text-green-400 transition-colors px-4 py-2">
-            Login
-          </Link>
-          <Link
-            to="/register"
-            className="border border-white/30 hover:border-green-400 text-white hover:text-green-400 px-6 py-2 rounded-full transition-all duration-200"
-          >
-            Sign Up
-          </Link>
+          {!isLoggedIn && (
+            <>
+              <Link to="/login" className="text-white hover:text-green-400 transition-colors px-4 py-2">
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="border border-white/30 hover:border-green-400 text-white hover:text-green-400 px-6 py-2 rounded-full transition-all duration-200"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -70,54 +77,56 @@ const Nav = () => {
           <Link
             onClick={() => setHamBurger(false)}
             to="/"
-            className="block text-white hover:text-green-400 transition-colors py-2"
+            className={`block ${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors py-2`}
           >
             Home
           </Link>
           <Link
             onClick={() => setHamBurger(false)}
             to="/courses"
-            className="block text-white hover:text-green-400 transition-colors py-2"
+            className={`block ${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors py-2`}
           >
             Courses
           </Link>
           <Link
             onClick={() => setHamBurger(false)}
             to="/programs"
-            className="block text-white hover:text-green-400 transition-colors py-2"
+            className={`block ${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors py-2`}
           >
             Programs
           </Link>
           <Link
             onClick={() => setHamBurger(false)}
             to="/resources"
-            className="block text-white hover:text-green-400 transition-colors py-2"
+            className={`block ${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors py-2`}
           >
             Resources
           </Link>
           <Link
             onClick={() => setHamBurger(false)}
             to="/contact-us"
-            className="block text-white hover:text-green-400 transition-colors py-2"
+            className={`block ${bg === "#D7D7D7" ? "text-[#263238]" : "text-white"} hover:text-green-400 transition-colors py-2`}
           >
             Contact us
           </Link>
-          <div className="pt-4 border-t border-white/10 space-y-3">
-            <Link
-              onClick={() => setHamBurger(false)}
-              to="/login"
-              className="block text-white hover:text-green-400 transition-colors py-2"
-            >
-              Login
-            </Link>
-            <Link
-              onClick={() => setHamBurger(false)}
-              to="/register"
-              className="block border border-white/30 hover:border-green-400 text-white hover:text-green-400 px-6 py-2 rounded-full transition-all duration-200 text-center"
-            >
-              Sign Up
-            </Link>
-          </div>
+          {!isLoggedIn && (
+            <div className="pt-4 border-t border-white/10 space-y-3">
+              <Link
+                onClick={() => setHamBurger(false)}
+                to="/login"
+                className="block text-white hover:text-green-400 transition-colors py-2"
+              >
+                Login
+              </Link>
+              <Link
+                onClick={() => setHamBurger(false)}
+                to="/register"
+                className="block border border-white/30 hover:border-green-400 text-white hover:text-green-400 px-6 py-2 rounded-full transition-all duration-200 text-center"
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 

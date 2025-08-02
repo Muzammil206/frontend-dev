@@ -5,7 +5,7 @@ import Register from "./Pages/Register";
 import "font-awesome/css/font-awesome.min.css";
 import AboutPage from "./Pages/AboutPage";
 import ScrollToTop from "./Utilities/ScrollToTop";
-import Course_details from "./Pages/Course_details";
+import CourseDetailsPage from "./Pages/course-details-page";
 import StudentDashboard from "./Pages/StudentDashboard";
 import Programs from "./Pages/Programs";
 import ContactUSPage from "./Pages/ContactUSPage";
@@ -14,6 +14,7 @@ import CoursesPage from "./Pages/CoursesPage";
 import Resources from "./Pages/resources/Resources";
 import Eachresourcesdetails from "./Pages/resources/Eachresourcesdetails";
 import Events from "./Pages/events/Events";
+import CartPage from "./Pages/cart-page";
 function App() {
   return (
     <div className="">
@@ -26,7 +27,8 @@ function App() {
           <Route path="/forgetpassword" element={<Forgetpassword />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/courses" element={<CoursesPage />} />
-          <Route path="/course_details" element={<Course_details />} />
+         <Route path="/courses/:id" element={<CourseDetailsPage />} /> 
+           <Route path="/cart" element={<CartPage />} />
           <Route path="/dashboard" element={<StudentDashboard />} />
           <Route path="/programs" element={<Programs />} />
           <Route path="/resources" element={<Resources />} />
