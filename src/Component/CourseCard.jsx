@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import AvatarGroup from "./AvatarGroup" // Import AvatarGroup
-import { Link } from "react-router-dom" // Import Link for navigation
-import { Clock, Star } from "lucide-react" // Import Lucide icons
+import AvatarGroup from "./AvatarGroup" 
+import { Link } from "react-router-dom" 
+import { Clock, Star } from "lucide-react" 
 
 const CourseCard = ({
-  id, // Add id prop for routing
+  id, 
   name,
   overlayTitle,
   courseTitle,
@@ -25,7 +25,7 @@ const CourseCard = ({
   const [imageError, setImageError] = useState(false)
 
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 w-full h-full flex flex-col cursor-pointer" onClick={() => window.location.href = `/courses/${id}`}>
+    <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 w-full h-full flex flex-col cursor-pointer min-w-0" onClick={() => window.location.href = `/courses/${id}`}> 
         {/* Course Preview Media */}
         <div className="relative h-48 bg-gray-100 overflow-hidden">
           {/* Preview Image */}
@@ -80,7 +80,7 @@ const CourseCard = ({
         </div>
 
         {/* Course Content */}
-        <div className="p-4 md:p-6 flex flex-col flex-grow">
+        <div className="p-4 md:p-6 flex flex-col flex-grow min-w-0">
           {/* Instructor & Rating */}
           <div className="flex justify-between items-center mb-3">
             <div className="flex items-center gap-2">

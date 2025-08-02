@@ -138,7 +138,7 @@ const PopularCourses = () => {
         </div>
 
         {/* Courses Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full max-w-full overflow-x-hidden">
           {filteredCourses.length > 0 ? (
             filteredCourses.map((course, index) => <CourseCard key={index} {...course} />)
           ) : (
