@@ -47,8 +47,8 @@ export const Hero = () => {
         <div className="relative z-10 w-full h-full flex items-center justify-center">
           {/* Diamond Shapes */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-60 h-80 border-4 border-green-400 rotate-45 rounded-3xl opacity-40"></div>
-            <div className="absolute w-60 h-80 border-4 border-blue-500 rotate-45 rounded-3xl opacity-40 translate-x-4 translate-y-4"></div>
+            <div className="lg:w-80 w-50 h-80 border-4 border-green-400 rotate-45 rounded-3xl opacity-40"></div>
+            <div className="absolute lg:w-80 w-50 h-80 border-4 border-blue-500 rotate-45 rounded-3xl opacity-40 translate-x-4 translate-y-4"></div>
           </div>
 
           {/* Main Image Container */}
