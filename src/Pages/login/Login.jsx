@@ -1,13 +1,11 @@
-// removed 'use client' directive
+
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5"
-import { toast } from "react-hot-toast" // Assuming react-hot-toast is installed
-import Nav from "../../Component/Nav"
-import Footer from "../../Component/Footer"
-import Loginimg from "../../assets/login.png"
-import Google from "../../assets/google.png"
+import { toast } from "react-hot-toast" 
+import {  Twitter } from "lucide-react" 
+
 
 
 const Login = () => {
@@ -55,7 +53,7 @@ const Login = () => {
     setIsSubmitting(true) // Start loading
 
     try {
-      const res = await fetch("http://localhost:5000/api/v1/auth/login", {
+      const res = await fetch("https://lms-backend-yux4.onrender.com/api/v1/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,121 +83,123 @@ const Login = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Nav />
-      <section className="flex flex-grow flex-col md:flex-row justify-center items-center md:items-start gap-8 md:gap-16 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        {/* Image Section - Hidden on small screens, visible on medium and up */}
-        <div className="hidden md:flex md:w-1/2 lg:w-2/5 items-center justify-center p-4">
-          <img
-            className="max-w-full h-auto object-contain"
-            src={Loginimg || "/placeholder.svg"}
-            alt="Login illustration"
-          />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        {/* Logo and Titles */}
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+          <img className="h-12 w-auto" src="/SVGs/logo.svg" alt="Awibi Institute Logo" />
+            <div className="flex flex-col">
+              <span className="font-dm-sans text-xl font-bold leading-tight text-gray-900">Awibi</span>
+              <span className="font-dm-sans text-sm text-gray-600 leading-tight">Institute</span>
+            </div>
+          </div>
+          <h2 className="font-dm-sans mt-6 text-3xl font-bold text-gray-900">Sign in</h2>
+          <p className="font-dm-sans mt-2 text-sm text-gray-600">
+            Welcome back to Awibi Institute, kindly input your details
+          </p>
         </div>
 
-        {/* Form Section */}
-        <div className="w-full sm:w-4/5 md:w-1/2 lg:w-3/5 bg-white p-6 sm:p-8 rounded-lg shadow-md">
-          <div className="flex flex-col items-center justify-center text-center mb-8">
-            <p className="text-2xl sm:text-3xl font-semibold text-gray-900">Welcome to Hoistlfick!</p>
-            <p className="text-xl sm:text-2xl text-gray-700 mt-2">Login to account</p>
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div>
+            <label htmlFor="email-address" className="sr-only">
+              Email address
+            </label>
+            <input
+              id="email-address"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              className={`font-dm-sans appearance-none relative block w-full px-3 py-2 border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm`}
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              aria-invalid={errors.email ? "true" : "false"}
+              aria-describedby="email-error"
+            />
+            {errors.email && (
+              <p id="email-error" className="text-red-500 text-xs mt-1 text-left">
+                {errors.email}
+              </p>
+            )}
+          </div>
+          <div className="relative">
+            <label htmlFor="password" className="sr-only">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              className={`font-dm-sans appearance-none relative block w-full px-3 py-2 border ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm`}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              aria-invalid={errors.password ? "true" : "false"}
+              aria-describedby="password-error"
+            />
+            <span
+              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500"
+              onClick={handleShowPassword}
+            >
+              {showPassword ? <IoEyeOutline className="h-5 w-5" /> : <IoEyeOffOutline className="h-5 w-5" />}
+            </span>
+            {errors.password && (
+              <p id="password-error" className="text-red-500 text-xs mt-1 text-left">
+                {errors.password}
+              </p>
+            )}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-base font-medium text-gray-700 mb-1" htmlFor="email">
-                Email Address
-              </label>
-              <input
-                id="email"
-                placeholder="Enter your email"
-                className={`w-full px-4 py-2 border ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                } rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                aria-invalid={errors.email ? "true" : "false"}
-                aria-describedby="email-error"
-              />
-              {errors.email && (
-                <p id="email-error" className="text-red-500 text-sm mt-1">
-                  {errors.email}
-                </p>
-              )}
-            </div>
-
-            <div className="relative">
-              <label className="block text-base font-medium text-gray-700 mb-1" htmlFor="password">
-                Password
-              </label>
-              <input
-                id="password"
-                placeholder="Enter your password"
-                className={`w-full px-4 py-2 border ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                aria-invalid={errors.password ? "true" : "false"}
-                aria-describedby="password-error"
-              />
-              <span className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer top-7 text-gray-500">
-                {showPassword ? (
-                  <IoEyeOutline onClick={handleShowPassword} className="text-xl" />
-                ) : (
-                  <IoEyeOffOutline onClick={handleShowPassword} className="text-xl" />
-                )}
-              </span>
-              {errors.password && (
-                <p id="password-error" className="text-red-500 text-sm mt-1">
-                  {errors.password}
-                </p>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between w-full text-sm">
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="remember-me" className="rounded text-blue-600 focus:ring-blue-500" />
-                <label htmlFor="remember-me" className="text-gray-700">
-                  Remember me
-                </label>
-              </div>
-              <Link to="/forgetpassword" className="text-blue-600 hover:underline">
-                Forget Password ?
+          <div className="flex items-center justify-end">
+            <div className="text-sm">
+              <Link to="/forgetpassword" className="font-dm-sans font-medium text-green-600 hover:text-green-500">
+                Forget your password
               </Link>
             </div>
+          </div>
 
+          <div>
             <button
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               type="submit"
+              className="font-dm-sans group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Logging in..." : "Login"}
-            </button>
-          </form>
-
-          <div className="relative flex items-center justify-center my-6">
-            <span className="absolute w-full h-[1px] bg-gray-200 -z-10"></span>
-            <span className="bg-white px-4 text-sm text-gray-500">Or login with</span>
-          </div>
-
-          <div className="flex items-center justify-center">
-            <button className="text-gray-700 flex items-center gap-2 bg-gray-100 hover:bg-gray-200 py-2.5 px-6 rounded-md font-medium transition-colors duration-200">
-              <img src={Google || "/placeholder.svg"} alt="Google logo" className="w-5 h-5" />
-              Continue with Google
+              {isSubmitting ? "Signing in..." : "Sign up"}
             </button>
           </div>
+        </form>
 
-          <div className="text-center mt-6 text-gray-700 text-sm">
-            Don't have an account?{" "}
-            <Link to="/Register" className="text-blue-600 hover:underline font-medium">
-              Sign up
-            </Link>
-          </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="absolute inset-x-0 top-1/2 h-px bg-gray-300 -z-10"></span>
+          <span className="relative bg-gray-50 px-4 text-gray-500">OR</span>
         </div>
-      </section>
-      <Footer />
+
+        <div className="space-y-3">
+          <button className="font-dm-sans w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+            <img src='/SVGs/google.png' alt="Google logo" className="mr-2" />
+            Continue with Google
+          </button>
+          <button className="font-dm-sans w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+            <Twitter className="mr-2 h-5 w-5" />
+            Continue with Twitter
+          </button>
+        </div>
+
+        <div className="font-dm-sans text-center text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Link to="/Register" className="font-medium text-green-600 hover:text-green-500">
+            Sign up
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }

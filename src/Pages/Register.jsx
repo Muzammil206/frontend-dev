@@ -1,20 +1,18 @@
-// removed 'use client' directive
+"use client"
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5"
-import { toast } from "react-hot-toast" // Assuming react-hot-toast is installed
-import Nav from "../Component/Nav"
-import Footer from "../Component/Footer"
-import Loginimg from "../assets/login.png"
-import Google from "../assets/google.png"
+import { toast } from "react-hot-toast"
+import { Chrome, Twitter } from "lucide-react" // Import Lucide icons
 
 const Register = () => {
-  const navigate = useNavigate() // Initialize useNavigate for redirection
+  const navigate = useNavigate()
 
   const [showPassword, setShowPassword] = useState(false)
-  const [username, setUsername] = useState("") // Changed from userName to username
+  const [fullName, setFullName] = useState("") // Renamed from username
   const [email, setEmail] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("") // New field
   const [password, setPassword] = useState("")
   const [role] = useState("student") // Default role, removed UI input
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -28,8 +26,8 @@ const Register = () => {
     const newErrors = {}
     let isValid = true
 
-    if (!username.trim()) {
-      newErrors.username = "Username is required."
+    if (!fullName.trim()) {
+      newErrors.fullName = "Full name is required."
       isValid = false
     }
 
@@ -38,6 +36,14 @@ const Register = () => {
       isValid = false
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Email address is invalid."
+      isValid = false
+    }
+
+    if (!phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required."
+      isValid = false
+    } else if (!/^\+?[0-9\s\-()]{7,20}$/.test(phoneNumber)) {
+      newErrors.phoneNumber = "Phone number is invalid."
       isValid = false
     }
 
@@ -58,21 +64,22 @@ const Register = () => {
 
     if (!validateForm()) {
       toast.error("Please correct the errors in the form.")
-      return // Stop submission if validation fails
+      return
     }
 
-    setIsSubmitting(true) // Start loading
+    setIsSubmitting(true)
 
     try {
-      const res = await fetch("http://localhost:5000/api/v1/auth/register", {
+      const res = await fetch("https://lms-backend-yux4.onrender.com/api/v1/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: email,
-          role: role, // 'role' is now a fixed default value
-          username: username, // Using the new username state
+          role: role,
+          username: fullName, // Backend might still expect 'username'
+          phoneNumber: phoneNumber, // Include phone number
           password: password,
         }),
       })
@@ -82,7 +89,7 @@ const Register = () => {
 
       if (data.success) {
         toast.success("Account created successfully! Redirecting to login...")
-        navigate("/Login") // Redirect to login page
+        navigate("/Login")
       } else {
         toast.error(data.message || "Registration failed. Please try again.")
       }
@@ -90,153 +97,182 @@ const Register = () => {
       console.error("Network or API error:", error)
       toast.error("An error occurred while creating your account. Please try again.")
     } finally {
-      setIsSubmitting(false) // End loading
+      setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Nav />
-      <section className="flex flex-grow flex-col md:flex-row justify-center items-center md:items-start gap-8 md:gap-16 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        {/* Image Section - Hidden on small screens, visible on medium and up */}
-        <div className="hidden md:flex md:w-1/2 lg:w-2/5 items-center justify-center p-4">
-          <img
-            className="max-w-full h-auto object-contain"
-            src={Loginimg || "/placeholder.svg"}
-            alt="Login illustration"
-          />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        {/* Logo and Titles */}
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-lg">A</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-dm-sans text-xl font-bold leading-tight text-gray-900">Awibi</span>
+              <span className="font-dm-sans text-sm text-gray-600 leading-tight">Institute</span>
+            </div>
+          </div>
+          <h2 className="font-dm-sans mt-6 text-3xl font-bold text-gray-900">
+            Create an account{" "}
+            <Link to="/Login" className="font-medium text-green-600 hover:text-green-500">
+              Log in
+            </Link>
+          </h2>
         </div>
 
-        {/* Form Section */}
-        <div className="w-full sm:w-4/5 md:w-1/2 lg:w-3/5 bg-white p-6 sm:p-8 rounded-lg shadow-md">
-          <div className="flex flex-col items-center justify-center text-center mb-8">
-            <p className="text-2xl sm:text-3xl font-semibold text-gray-900">Welcome to Hoistlfick!</p>
-            <p className="text-xl sm:text-2xl text-gray-700 mt-2">Create an account</p>
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div>
+            <label htmlFor="full-name" className="sr-only">
+              Full name
+            </label>
+            <input
+              id="full-name"
+              name="fullName"
+              type="text"
+              autoComplete="name"
+              required
+              className={`font-dm-sans appearance-none relative block w-full px-3 py-2 border ${
+                errors.fullName ? "border-red-500" : "border-gray-300"
+              } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm`}
+              placeholder="Full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              aria-invalid={errors.fullName ? "true" : "false"}
+              aria-describedby="full-name-error"
+            />
+            {errors.fullName && (
+              <p id="full-name-error" className="text-red-500 text-xs mt-1 text-left">
+                {errors.fullName}
+              </p>
+            )}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-base font-medium text-gray-700 mb-1" htmlFor="username">
-                Username
-              </label>
-              <input
-                id="username"
-                placeholder="Enter your username"
-                className={`w-full px-4 py-2 border ${
-                  errors.username ? "border-red-500" : "border-gray-300"
-                } rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                aria-invalid={errors.username ? "true" : "false"}
-                aria-describedby="username-error"
-              />
-              {errors.username && (
-                <p id="username-error" className="text-red-500 text-sm mt-1">
-                  {errors.username}
-                </p>
-              )}
-            </div>
+          <div>
+            <label htmlFor="email-address" className="sr-only">
+              Email address
+            </label>
+            <input
+              id="email-address"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              className={`font-dm-sans appearance-none relative block w-full px-3 py-2 border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm`}
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              aria-invalid={errors.email ? "true" : "false"}
+              aria-describedby="email-error"
+            />
+            {errors.email && (
+              <p id="email-error" className="text-red-500 text-xs mt-1 text-left">
+                {errors.email}
+              </p>
+            )}
+          </div>
 
-            <div>
-              <label className="block text-base font-medium text-gray-700 mb-1" htmlFor="email">
-                Email Address
-              </label>
-              <input
-                id="email"
-                placeholder="Enter your email"
-                className={`w-full px-4 py-2 border ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                } rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                aria-invalid={errors.email ? "true" : "false"}
-                aria-describedby="email-error"
-              />
-              {errors.email && (
-                <p id="email-error" className="text-red-500 text-sm mt-1">
-                  {errors.email}
-                </p>
-              )}
-            </div>
+          <div>
+            <label htmlFor="phone-number" className="sr-only">
+              Phone number
+            </label>
+            <input
+              id="phone-number"
+              name="phoneNumber"
+              type="tel"
+              autoComplete="tel"
+              required
+              className={`font-dm-sans appearance-none relative block w-full px-3 py-2 border ${
+                errors.phoneNumber ? "border-red-500" : "border-gray-300"
+              } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm`}
+              placeholder="Phone number"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              aria-invalid={errors.phoneNumber ? "true" : "false"}
+              aria-describedby="phone-number-error"
+            />
+            {errors.phoneNumber && (
+              <p id="phone-number-error" className="text-red-500 text-xs mt-1 text-left">
+                {errors.phoneNumber}
+              </p>
+            )}
+          </div>
 
-            <div className="relative">
-              <label className="block text-base font-medium text-gray-700 mb-1" htmlFor="password">
-                Password
-              </label>
-              <input
-                id="password"
-                placeholder="Enter your password"
-                className={`w-full px-4 py-2 border ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                aria-invalid={errors.password ? "true" : "false"}
-                aria-describedby="password-error"
-              />
-              <span className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer top-7 text-gray-500">
-                {showPassword ? (
-                  <IoEyeOutline onClick={handleShowPassword} className="text-xl" />
-                ) : (
-                  <IoEyeOffOutline onClick={handleShowPassword} className="text-xl" />
-                )}
-              </span>
-              {errors.password && (
-                <p id="password-error" className="text-red-500 text-sm mt-1">
-                  {errors.password}
-                </p>
-              )}
-            </div>
+          <div className="relative">
+            <label htmlFor="password" className="sr-only">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              required
+              className={`font-dm-sans appearance-none relative block w-full px-3 py-2 border ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm`}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              aria-invalid={errors.password ? "true" : "false"}
+              aria-describedby="password-error"
+            />
+            <span
+              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500"
+              onClick={handleShowPassword}
+            >
+              {showPassword ? <IoEyeOutline className="h-5 w-5" /> : <IoEyeOffOutline className="h-5 w-5" />}
+            </span>
+            {errors.password && (
+              <p id="password-error" className="text-red-500 text-xs mt-1 text-left">
+                {errors.password}
+              </p>
+            )}
+          </div>
 
-            <div className="flex items-center justify-between w-full text-sm">
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="remember-me" className="rounded text-blue-600 focus:ring-blue-500" />
-                <label htmlFor="remember-me" className="text-gray-700">
-                  Remember me
-                </label>
-              </div>
-              <Link to="/forgetpassword" className="text-blue-600 hover:underline">
-                Forget Password ?
-              </Link>
-            </div>
+          <p className="font-dm-sans text-xs text-gray-600 text-center">
+            By creating an account, you agree to our{" "}
+            <Link to="/terms" className="font-medium text-green-600 hover:text-green-500">
+              Terms of use
+            </Link>{" "}
+            and{" "}
+            <Link to="/privacy" className="font-medium text-green-600 hover:text-green-500">
+              Privacy Policy
+            </Link>
+            .
+          </p>
 
-            <p className="text-sm text-gray-700">
-              By continuing, you agree to our <span className="text-blue-600 font-medium">terms of service</span>.
-            </p>
-
+          <div>
             <button
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               type="submit"
+              className="font-dm-sans group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Signing up..." : "Sign up"}
             </button>
-          </form>
-
-          <div className="relative flex items-center justify-center my-6">
-            <span className="absolute w-full h-[1px] bg-gray-200 -z-10"></span>
-            <span className="bg-white px-4 text-sm text-gray-500">Or register with</span>
           </div>
+        </form>
 
-          <div className="flex items-center justify-center">
-            <button className="text-gray-700 flex items-center gap-2 bg-gray-100 hover:bg-gray-200 py-2.5 px-6 rounded-md font-medium transition-colors duration-200">
-              <img src={Google || "/placeholder.svg"} alt="Google logo" className="w-5 h-5" />
-              Continue with Google
-            </button>
-          </div>
-
-          <div className="text-center mt-6 text-gray-700 text-sm">
-            Already have an account?{" "}
-            <Link to="/Login" className="text-blue-600 hover:underline font-medium">
-              Login
-            </Link>
-          </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="absolute inset-x-0 top-1/2 h-px bg-gray-300 -z-10"></span>
+          <span className="relative bg-gray-50 px-4 text-gray-500">OR</span>
         </div>
-      </section>
-      <Footer />
+
+        <div className="space-y-3">
+          <button className="font-dm-sans w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+            <img src="/SVGs/google.png" alt="" />
+            Continue with Google
+          </button>
+          <button className="font-dm-sans w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+            <Twitter className="mr-2 h-5 w-5" />
+            Continue with Twitter
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
