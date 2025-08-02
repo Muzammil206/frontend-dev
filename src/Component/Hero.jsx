@@ -37,20 +37,18 @@ export const Hero = () => {
           <Search />
         </div>
 
-        
+        {/* Partner Logos */}
       
       </div>
 
-
-
-      
+      {/* Right Image Section */}
       <div className="md:w-[40%] w-full flex justify-center items-center relative p-8 rounded-[3rem] bg-gradient-to-br from-white via-green-50 to-blue-50">
         {/* Geometric Background */}
         <div className="relative z-10 w-full h-full flex items-center justify-center">
           {/* Diamond Shapes */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-80 h-80 border-4 border-green-400 rotate-45 rounded-3xl opacity-40"></div>
-            <div className="absolute w-80 h-80 border-4 border-blue-500 rotate-45 rounded-3xl opacity-40 translate-x-4 translate-y-4"></div>
+            <div className="w-60 h-80 border-4 border-green-400 rotate-45 rounded-3xl opacity-40"></div>
+            <div className="absolute w-60 h-80 border-4 border-blue-500 rotate-45 rounded-3xl opacity-40 translate-x-4 translate-y-4"></div>
           </div>
 
           {/* Main Image Container */}
@@ -64,7 +62,7 @@ export const Hero = () => {
                 e.target.src = "/placeholder.svg?height=400&width=400"
               }}
             />
-            
+            {/* Mobile/Tablet Image - Hidden on desktop */}
             <img
               src="/SVGs/side.png"
               className="block lg:hidden w-full h-full object-cover"
@@ -75,7 +73,7 @@ export const Hero = () => {
             />
           </div>
 
-         
+          {/* Floating Social Proof Badge - Top Right */}
           <FloatingBadge
             className="absolute -top-6 -right-6 md:-right-12 z-30" // Adjusted positioning
             text="Over 2500 students"
