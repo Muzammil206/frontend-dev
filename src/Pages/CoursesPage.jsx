@@ -1,196 +1,26 @@
+"use client"
 
-import { useState, useMemo } from "react"
-import CourseHeader from "../Component/CourseHeader" 
-import CourseCard from "../Component/CourseCard" 
-import MostViewedCoursesSection from "../Component/MostViewedCoursesSection" 
-import Footer from "../Component/Footer" 
-import { Search, ChevronDown } from "lucide-react" 
-
-// Dummy data for allCourses (replace with your actual data source)
-const allCourses = [
-  {
-    id: 1,
-    name: "Design",
-    overlayTitle: "Graphic Design Mastery Course",
-    courseTitle: "Graphic Design Mastery - Course",
-    description:
-      "Product Management Masterclass, you will learn with Sarah Johnson - Head of Product Customer Platform Gojek Indonesia.",
-    level: "Intermediate",
-    time: "6 months",
-    price: "N 900",
-    oldPrice: "N 3,500",
-    enrolledCount: 40,
-    previewImage: "/placeholder.svg?height=200&width=300",
-    instructor: "Jane Doe",
-    avatar: "/placeholder.svg?height=32&width=32",
-    rating: 4.7,
-    courseType: "Professional",
-    subcategory: "Graphic Design",
-    students: 1500,
-    date: "2023-01-15",
-    tags: ["design", "graphic", "ui/ux"],
-  },
-  {
-    id: 2,
-    name: "Development",
-    overlayTitle: "Web Development",
-    courseTitle: "Web Development for Everybody - Specialization",
-    description:
-      "Product Management Masterclass, you will learn with Sarah Johnson - Head of Product Customer Platform Gojek Indonesia.",
-    level: "Advanced",
-    time: "6 months",
-    price: "N 7,000",
-    oldPrice: null,
-    enrolledCount: 342,
-    previewImage: "/placeholder.svg?height=200&width=300",
-    instructor: "John Smith",
-    avatar: "/placeholder.svg?height=32&width=32",
-    rating: 4.5,
-    courseType: "Professional",
-    subcategory: "Web development",
-    students: 2500,
-    date: "2023-02-20",
-    tags: ["development", "web", "frontend"],
-  },
-  {
-    id: 3,
-    name: "Data Science",
-    overlayTitle: "Data Science Professional Certificate",
-    courseTitle: "Data Science Professional Certificate",
-    description:
-      "Product Management Masterclass, you will learn with Sarah Johnson - Head of Product Customer Platform Gojek Indonesia.",
-    level: "Expert",
-    time: "6 months",
-    price: "N 678",
-    oldPrice: "N 500",
-    enrolledCount: 11,
-    previewImage: "/placeholder.svg?height=200&width=300",
-    instructor: "Emily White",
-    avatar: "/placeholder.svg?height=32&width=32",
-    rating: 4.8,
-    courseType: "Professional",
-    subcategory: "Data Analysis",
-    students: 1800,
-    date: "2023-03-10",
-    tags: ["data science", "ai", "machine learning"],
-  },
-  {
-    id: 4,
-    name: "Personal Development",
-    overlayTitle: "Personal Growth",
-    courseTitle: "The Science of Well-Being",
-    description:
-      "Product Management Masterclass, you will learn with Sarah Johnson - Head of Product Customer Platform Gojek Indonesia.",
-    level: "Intermediate",
-    time: "6 months",
-    price: "N 12,000",
-    oldPrice: null,
-    enrolledCount: 234,
-    previewImage: "/placeholder.svg?height=200&width=300",
-    instructor: "David Lee",
-    avatar: "/placeholder.svg?height=32&width=32",
-    rating: 4.6,
-    courseType: "Monthly crash course",
-    subcategory: "Productivity",
-    students: 1200,
-    date: "2023-04-01",
-    tags: ["personal development", "well-being"],
-  },
-  {
-    id: 5,
-    name: "Healthcare",
-    overlayTitle: "Healthcare Management",
-    courseTitle: "Healthcare Management Fundamentals",
-    description: "Learn the essentials of managing healthcare systems and operations.",
-    level: "Beginner",
-    time: "8 months",
-    price: "$567",
-    oldPrice: "$700",
-    enrolledCount: 120,
-    previewImage: "/placeholder.svg?height=200&width=300",
-    instructor: "Dr. Emily White",
-    avatar: "/placeholder.svg?height=32&width=32",
-    rating: 4.5,
-    courseType: "Professional",
-    subcategory: "Healthcare Operations",
-    students: 900,
-    date: "2023-05-05",
-    tags: ["healthcare", "management"],
-  },
-  {
-    id: 6,
-    name: "Development",
-    overlayTitle: "Mobile App Development",
-    courseTitle: "React Native Mobile App Development",
-    description: "Build cross-platform mobile applications using React Native.",
-    level: "Intermediate",
-    time: "4 months",
-    price: "N 8,500",
-    oldPrice: null,
-    enrolledCount: 180,
-    previewImage: "/placeholder.svg?height=200&width=300",
-    instructor: "Sarah Johnson",
-    avatar: "/placeholder.svg?height=32&width=32",
-    rating: 4.7,
-    courseType: "Monthly crash course",
-    subcategory: "Mobile Development",
-    students: 1100,
-    date: "2023-06-10",
-    tags: ["development", "mobile", "react native"],
-  },
-  {
-    id: 7,
-    name: "Design",
-    overlayTitle: "Web Design Fundamentals",
-    courseTitle: "Responsive Web Design with HTML & CSS",
-    description: "Learn to create beautiful and responsive websites from scratch.",
-    level: "Beginner",
-    time: "3 months",
-    price: "N 4,000",
-    oldPrice: null,
-    enrolledCount: 90,
-    previewImage: "/placeholder.svg?height=200&width=300",
-    instructor: "Alex Green",
-    avatar: "/placeholder.svg?height=32&width=32",
-    rating: 4.4,
-    courseType: "Hourly crash course",
-    subcategory: "Web Design",
-    students: 700,
-    date: "2023-07-01",
-    tags: ["design", "web", "frontend"],
-  },
-  {
-    id: 8,
-    name: "Data Science",
-    overlayTitle: "Machine Learning Basics",
-    courseTitle: "Introduction to Machine Learning with Python",
-    description: "Get started with machine learning concepts and algorithms using Python.",
-    level: "Beginner",
-    time: "5 months",
-    price: "N 10,000",
-    oldPrice: null,
-    enrolledCount: 210,
-    previewImage: "/placeholder.svg?height=200&width=300",
-    instructor: "Dr. Lena Khan",
-    avatar: "/placeholder.svg?height=32&width=32",
-    rating: 4.9,
-    courseType: "Professional",
-    subcategory: "Machine Learning",
-    students: 1900,
-    date: "2023-08-15",
-    tags: ["data science", "ai", "python"],
-  },
-]
+import { useState, useMemo, useEffect } from "react"
+import CourseHeader from "../Component/CourseHeader" // New Header component
+import CourseCard from "../Component/CourseCard" // Assuming CoursesCard is CourseCard
+import MostViewedCoursesSection from "../Component/MostViewedCoursesSection" // New Most Viewed Courses section
+import Footer from "../Component/Footer" // Reusing the existing Footer component
+import { Search, ChevronDown } from "lucide-react" // Import Search and ChevronDown from lucide-react
 
 const CourseDetailPage = () => {
+  // State for fetched courses
+  const [courses, setCourses] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
   // Filter states
   const [searchQuery, setSearchQuery] = useState("")
-  const [activeFilter, setActiveFilter] = useState("All Programme") // Changed default to match new design
+  const [activeFilter, setActiveFilter] = useState("All Programme")
   const [sortBy, setSortBy] = useState("Trending")
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
   const [showFilterModal, setShowFilterModal] = useState(false) // For mobile advanced filters
   const [currentPage, setCurrentPage] = useState(1)
-  const [coursesPerPage] = useState(8)
+  const [coursesPerPage] = useState(8) // Display 8 courses per page
 
   // Advanced filter states
   const [selectedCourseTypes, setSelectedCourseTypes] = useState([])
@@ -198,6 +28,28 @@ const CourseDetailPage = () => {
   const [selectedSubcategories, setSelectedSubcategories] = useState([])
   const [selectedRatings, setSelectedRatings] = useState([])
   const [expandedCategories, setExpandedCategories] = useState(["Development"]) // Default expanded
+
+  // Fetch courses on component mount
+  useEffect(() => {
+    const fetchAllCourses = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const response = await fetch("https://lms-backend-yux4.onrender.com/api/v1/courses")
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const data = await response.json()
+        setCourses(data.data) // Assuming the courses array is in data.data
+      } catch (err) {
+        console.error("Error fetching all courses for CourseDetailPage:", err)
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchAllCourses()
+  }, [])
 
   // Filter options
   const filterCategories = [
@@ -268,15 +120,15 @@ const CourseDetailPage = () => {
 
   // Filter logic - switches between simple and advanced
   const filteredCourses = useMemo(() => {
-    let filtered = allCourses
+    let filtered = courses // Use the fetched courses
 
     // Search filter (always active)
     if (searchQuery.trim()) {
       filtered = filtered.filter(
         (course) =>
-          course.courseTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          course.instructor.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          course.instructor_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (course.category?.name && course.category.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
           (course.tags && course.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))),
       )
     }
@@ -284,36 +136,38 @@ const CourseDetailPage = () => {
     if (showAdvancedFilters) {
       // Advanced filtering logic
       if (selectedCourseTypes.length > 0) {
-        filtered = filtered.filter((course) => selectedCourseTypes.includes(course.courseType))
+        filtered = filtered.filter((course) => selectedCourseTypes.includes(course.course_type)) // Assuming course_type from API
       }
       if (selectedCategories.length > 0) {
-        filtered = filtered.filter((course) => selectedCategories.includes(course.name))
+        filtered = filtered.filter((course) => selectedCategories.includes(course.category?.name))
       }
       if (selectedSubcategories.length > 0) {
         filtered = filtered.filter((course) => selectedSubcategories.includes(course.subcategory))
       }
       if (selectedRatings.length > 0) {
         const minRating = Math.min(...selectedRatings)
-        filtered = filtered.filter((course) => course.rating >= minRating)
+        filtered = filtered.filter((course) => course.rating >= minRating) // Assuming rating from API
       }
     } else {
       // Simple filtering logic (original)
       if (activeFilter !== "All Programme") {
-        filtered = filtered.filter((course) => course.name.toLowerCase() === activeFilter.toLowerCase())
+        filtered = filtered.filter((course) =>
+          course.category?.name?.toLowerCase().includes(activeFilter.toLowerCase()),
+        )
       }
     }
 
     // Sort courses
     switch (sortBy) {
       case "Newest":
-        filtered = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date))
+        filtered = [...filtered].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Assuming created_at from API
         break
       case "Popular":
-        filtered = [...filtered].sort((a, b) => b.students - a.students)
+        filtered = [...filtered].sort((a, b) => b.students_enrolled - a.students_enrolled) // Assuming students_enrolled from API
         break
       case "Trending":
       default:
-        filtered = [...filtered].sort((a, b) => b.rating - a.rating)
+        filtered = [...filtered].sort((a, b) => b.rating - a.rating) // Assuming rating from API
         break
     }
     return filtered
@@ -326,6 +180,7 @@ const CourseDetailPage = () => {
     selectedCategories,
     selectedSubcategories,
     selectedRatings,
+    courses, // Depend on the fetched courses
   ])
 
   // Pagination
@@ -601,21 +456,51 @@ const CourseDetailPage = () => {
           {/* Course Results Area */}
           <div className="flex-1">
             {/* Results Count */}
-            <div className="text-sm text-gray-600 mb-6">
-              {filteredCourses.length.toLocaleString()} results found{searchQuery && ` for "${searchQuery}"`}
-              {filteredCourses.length > 0 && (
-                <span className="ml-2">
-                  (Showing {indexOfFirstCourse + 1}-{Math.min(indexOfLastCourse, filteredCourses.length)} of{" "}
-                  {filteredCourses.length})
-                </span>
-              )}
-            </div>
+            {loading ? (
+              <div className="text-sm text-gray-600 mb-6">Loading results...</div>
+            ) : error ? (
+              <div className="text-sm text-red-500 mb-6">Error loading courses: {error}</div>
+            ) : (
+              <div className="text-sm text-gray-600 mb-6">
+                {filteredCourses.length.toLocaleString()} results found{searchQuery && ` for "${searchQuery}"`}
+                {filteredCourses.length > 0 && (
+                  <span className="ml-2">
+                    (Showing {indexOfFirstCourse + 1}-{Math.min(indexOfLastCourse, filteredCourses.length)} of{" "}
+                    {filteredCourses.length})
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Course Grid */}
-            {currentCourses.length > 0 ? (
+            {loading ? (
+              <div className="text-center py-12">
+                <p className="font-dm-sans text-gray-500 text-lg">Loading courses...</p>
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <p className="font-dm-sans text-red-500 text-lg">Error loading courses: {error}</p>
+              </div>
+            ) : currentCourses.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
                 {currentCourses.map((course) => (
-                  <CourseCard key={course.id} {...course} />
+                  <CourseCard
+                    key={course.id}
+                    id={course.id}
+                    name={course.category?.name || "Unknown"}
+                    overlayTitle={course.title}
+                    courseTitle={course.title}
+                    description={course.description}
+                    level={course.level}
+                    time={`${course.duration} hours`}
+                    price={`N ${course.price.toLocaleString()}`}
+                    oldPrice={course.discounted_price ? `N ${course.discounted_price.toLocaleString()}` : null}
+                    enrolledCount={0} // Not available in API, using dummy
+                    previewImage={course.thumbnail_url}
+                    instructor={course.instructor_name}
+                    avatar={"/placeholder.svg?height=32&width=32"} // Not available in API, using placeholder
+                    rating={0} // Not available in API, using dummy
+                  />
                 ))}
               </div>
             ) : (

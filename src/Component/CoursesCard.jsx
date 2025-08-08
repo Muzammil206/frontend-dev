@@ -1,181 +1,170 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+"use client"
 
+import { useState, useEffect } from "react" // Import useEffect for logging
+import AvatarGroup from "./AvatarGroup" // Import AvatarGroup
+import { Link } from "react-router-dom" // Import Link for navigation
+import { Clock, Star } from "lucide-react" // Import Lucide icons
 
-const CoursesCard = ({
-  id,
-  free,
+const CourseCard = ({
+  id, // Add id prop for routing
   name,
-  title,
+  overlayTitle,
+  courseTitle,
+  description,
   level,
   time,
-  date,
+  price,
+  oldPrice,
+  enrolledCount,
   previewImage,
-  previewVideo,
-  hasVideo,
   instructor,
   avatar,
-  price,
-  originalPrice,
   rating,
-  students,
-  description,
-  tags,
-  onCourseClick, // New prop for handling clicks
 }) => {
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
   const [imageError, setImageError] = useState(false)
 
-  const handlePlayVideo = (e) => {
-    e.stopPropagation() // Prevent card click when playing video
-    if (hasVideo && previewVideo) {
-      setIsVideoPlaying(true)
-    }
-  }
-
-  const handleVideoEnd = () => {
-    setIsVideoPlaying(false)
-  }
-
-  const handleCardClick = () => {
-    if (onCourseClick) {
-      onCourseClick(id)
-    }
-  }
+  // Add a console log to see the props received by CourseCard
+  useEffect(() => {
+    console.log("CourseCard received props for course ID:", id, {
+      name,
+      overlayTitle,
+      courseTitle,
+      description,
+      level,
+      time,
+      price,
+      oldPrice,
+      enrolledCount,
+      previewImage,
+      instructor,
+      avatar,
+      rating,
+    })
+  }, [
+    id,
+    name,
+    overlayTitle,
+    courseTitle,
+    description,
+    level,
+    time,
+    price,
+    oldPrice,
+    enrolledCount,
+    previewImage,
+    instructor,
+    avatar,
+    rating,
+  ])
 
   return (
-    <div
-      className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
-      onClick={handleCardClick}
-    >
-      <div className="relative h-48 bg-gray-100 overflow-hidden group">
-        <div className="absolute top-3 right-3 z-20">
-          <span
-            className={`px-2 py-1 text-xs font-medium rounded ${
-              free ? "bg-white text-gray-800" : "bg-blue-600 text-white"
-            } shadow-sm`}
-          >
-            {free ? "Free" : "Paid"}
-          </span>
-        </div>
-
-        <div className="absolute bottom-3 left-3 z-20">
-          <span className="bg-white text-gray-800 text-xs px-2 py-1 rounded font-medium shadow-sm">{level}</span>
-        </div>
-
-        {isVideoPlaying && hasVideo && previewVideo ? (
-          <video
-            className="w-full h-full object-cover"
-            controls
-            autoPlay
-            onEnded={handleVideoEnd}
-            onPause={() => setIsVideoPlaying(false)}
-            onClick={(e) => e.stopPropagation()} // Prevent card click when interacting with video
-          >
-            <source src={previewVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        ) : (
-          <>
-            {!imageError ? (
-              <img
-                src={previewImage || "/placeholder.svg?height=300&width=400&text=Course+Preview"}
-                alt={title}
-                className={`w-full h-full object-cover transition-opacity duration-300 ${
-                  imageLoaded ? "opacity-100" : "opacity-0"
-                }`}
-                onLoad={() => setImageLoaded(true)}
-                onError={() => {
-                  setImageError(true)
-                  setImageLoaded(true)
-                }}
-              />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-                <div className="text-white text-4xl opacity-50">📚</div>
-              </div>
-            )}
-
-            {!imageLoaded && !imageError && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
-
-            {hasVideo && previewVideo && imageLoaded && (
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                <button
-                  onClick={handlePlayVideo}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-4 transform hover:scale-110 transition-transform"
-                >
-                  <svg className="h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
-      <div className="p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <img
-            src={avatar || "/placeholder.svg?height=24&width=24"}
-            alt={instructor}
-            className="w-6 h-6 rounded-full bg-blue-100 object-cover"
-          />
-          <span className="text-sm font-medium text-gray-700 flex-1 truncate">{instructor}</span>
-          <div className="flex items-center gap-1">
-            <svg className="h-4 w-4 fill-yellow-400 text-yellow-400" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
-            <span className="text-sm font-medium text-gray-900">{rating}</span>
-          </div>
-        </div>
-
-        <h3 className="font-semibold text-base text-gray-900 mb-2 line-clamp-2 leading-tight">{title}</h3>
-
-        {/* Course Category */}
-        <div className="text-sm text-gray-600 mb-2">{name}</div>
-
-        {/* Course Duration */}
-        <div className="flex items-center gap-1 mb-3 text-sm text-gray-600">
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+    <Link to={`/courses/${id}`} className="block">
+      {" "}
+      {/* Wrap the card with Link */}
+      <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 w-full h-full flex flex-col">
+        {/* Course Preview Media */}
+        <div className="relative h-48 bg-gray-100 overflow-hidden">
+          {/* Preview Image */}
+          {!imageError ? (
+            <img
+              src={previewImage || "/placeholder.svg?height=300&width=400&text=Course+Preview"}
+              alt={courseTitle}
+              className={`w-full h-full object-cover transition-opacity duration-300 ${
+                imageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => {
+                setImageError(true)
+                setImageLoaded(true)
+              }}
             />
-          </svg>
-          <span>{time}</span>
-        </div>
-
-        <div className="flex items-center justify-between">
-          {free ? (
-            <span className="text-lg font-bold text-gray-900">$0</span>
           ) : (
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-bold text-gray-900">${price}</span>
-              {originalPrice > price && <span className="text-sm text-gray-500 line-through">${originalPrice}</span>}
+            // Fallback when image fails to load
+            <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+              <div className="text-white text-3xl md:text-4xl opacity-50">
+                <i className="fa fa-graduation-cap"></i>
+              </div>
+            </div>
+          )}
+          {/* Loading Skeleton */}
+          {!imageLoaded && !imageError && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+              <div className="text-gray-400">
+                <i className="fa fa-image text-xl md:text-2xl"></i>
+              </div>
             </div>
           )}
 
-          {/* Circular Arrow Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation() // Prevent card click
-              handleCardClick() // Navigate to course detail
-            }}
-            className="w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-[7.46px] flex items-center justify-center transition-colors duration-200 shadow-sm hover:shadow-md"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          {/* Overlay Title */}
+          <div className="absolute inset-0 flex items-center justify-center p-4 text-center">
+            <h2 className="font-dm-sans text-3xl md:text-4xl font-bold text-white leading-tight">{overlayTitle}</h2>
+          </div>
+
+          {/* Enrolled Badge */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
+            <AvatarGroup
+              avatars={[
+                "/placeholder.svg?height=32&width=32",
+                "/placeholder.svg?height=32&width=32",
+                "/placeholder.svg?height=32&width=32",
+              ]}
+              text={`+ ${enrolledCount} Enrolled`}
+              size="sm"
+              className="bg-white/90 backdrop-blur-sm border-none shadow-md"
+            />
+          </div>
+        </div>
+
+        {/* Course Content */}
+        <div className="p-4 md:p-6 flex flex-col flex-grow">
+          {/* Instructor & Rating */}
+          <div className="flex justify-between items-center mb-3">
+            <div className="flex items-center gap-2">
+              <img
+                src={avatar || "/placeholder.svg?height=32&width=32"}
+                alt={instructor}
+                className="w-6 h-6 rounded-full object-cover"
+              />
+              <span className="font-dm-sans text-sm font-medium text-gray-700 truncate">{instructor}</span>
+            </div>
+            <div className="flex items-center gap-1 text-yellow-500">
+              <Star className="h-4 w-4 fill-current" /> {/* Lucide Star icon */}
+              <span className="font-dm-sans text-sm font-medium text-gray-700">{rating}</span>
+            </div>
+          </div>
+
+          {/* Course Title */}
+          <h3 className="font-dm-sans font-bold text-lg text-gray-900 mb-2 line-clamp-2 leading-tight">
+            {courseTitle}
+          </h3>
+
+          {/* Course Description */}
+          <p className="font-dm-sans text-sm text-gray-600 mb-3 line-clamp-2">{description}</p>
+
+          {/* Course Details */}
+          <div className="flex items-center gap-2 mb-4 mt-auto">
+            <Clock className="h-4 w-4 text-gray-500" /> {/* Lucide Clock icon */}
+            <span className="font-dm-sans text-sm text-gray-600 font-medium">{time}</span>
+          </div>
+
+          {/* Price and Enroll Button */}
+          <div className="flex justify-between items-center">
+            <div className="flex items-baseline gap-2">
+              <span className="font-dm-sans text-lg font-bold text-green-600">{price}</span>
+              {oldPrice && <span className="font-dm-sans text-sm text-gray-500 line-through">{oldPrice}</span>}
+            </div>
+            <Link
+              to={`/courses/${id}`} // Navigate to course detail page
+              className="font-dm-sans bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+            >
+              Enroll Now
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
-export default CoursesCard;
+export default CourseCard

@@ -1,26 +1,66 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { supabase } from "../lib/supabase" // Import your Supabase client
+
 const Categories = () => {
-  const categories = [
-    {
-      icon: "/placeholder.svg?height=48&width=48",
-      title: "Design & User Experience",
-      description: "One powerful online software suite that combines",
-    },
-    {
-      icon: "/placeholder.svg?height=48&width=48",
-      title: "Software",
-      description: "One powerful online software suite that combines",
-    },
-    {
-      icon: "/placeholder.svg?height=48&width=48",
-      title: "Data Science & AI",
-      description: "One powerful online software suite that combines",
-    },
-    {
-      icon: "/placeholder.svg?height=48&width=48",
-      title: "Digital Health & Soft Skills",
-      description: "One powerful online software suite that combines",
-    },
-  ]
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const { data, error } = await supabase.from("course_categories").select("*")
+        if (error) {
+          throw error
+        }
+        setCategories(data)
+        console.log("Fetched categories:", data) // Log fetched categories for debugging
+      } catch (err) {
+        console.error("Error fetching categories:", err.message)
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="py-16 px-6 md:px-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="font-dm-sans text-lg text-gray-600">Loading course categories...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section className="py-16 px-6 md:px-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="font-dm-sans text-lg text-red-500">Error loading categories: {error}</p>
+          <p className="font-dm-sans text-sm text-gray-600">
+            Please ensure your Supabase project is configured and the 'course_categories' table exists.
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  if (categories.length === 0) {
+    return (
+      <section className="py-16 px-6 md:px-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="font-dm-sans text-lg text-gray-600">No course categories found.</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="py-16 px-6 md:px-20 bg-gray-50">
@@ -46,7 +86,7 @@ const Categories = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {categories.map((category, index) => (
             <div
-              key={index}
+              key={category.id} // Use category.id as key
               className="bg-white rounded-2xl p-6 md:p-8 text-center flex flex-col items-center justify-between shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               {/* Icon */}
@@ -62,15 +102,16 @@ const Categories = () => {
                           : "bg-purple-100"
                   }`}
                 >
+                  {/* Using a placeholder as icon is not in Supabase data */}
                   <img
-                    src={category.icon || "/placeholder.svg"}
-                    alt={`${category.title} icon`}
+                    src={"/placeholder.svg?height=48&width=48&query=category+icon"}
+                    alt={`${category.name} icon`}
                     className="w-12 h-12 object-contain"
                   />
                 </div>
               </div>
               {/* Title */}
-              <h3 className="font-dm-sans text-xl md:text-2xl font-bold text-gray-900 mb-2">{category.title}</h3>
+              <h3 className="font-dm-sans text-xl md:text-2xl font-bold text-gray-900 mb-2">{category.name}</h3>
               {/* Description */}
               <p className="font-dm-sans text-sm md:text-base font-medium text-gray-600 leading-relaxed mb-4">
                 {category.description}

@@ -1,18 +1,15 @@
 
 
 import { useState } from "react"
-import { useAuth } from "../../context/auth-context"
+import { useAuth } from "../../context/auth-context" // Corrected path
 import { Link, useNavigate } from "react-router-dom"
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5"
-import { toast } from "react-hot-toast" 
-import {  Twitter } from "lucide-react" 
-
-
+import { toast } from "react-hot-toast"
+import { Twitter } from "lucide-react"
 
 const Login = () => {
   const navigate = useNavigate() // Initialize useNavigate for redirection
-  const { login } = useAuth();
-
+  const { login } = useAuth() // Use the login function from AuthContext
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -67,14 +64,15 @@ const Login = () => {
       })
 
       const data = await res.json()
-      console.log(data)
+      console.log("Login API response data:", data) // Keep this for debugging
 
-      if (data.success) {
+      if (data.success && data.session) {
+        // Ensure data.session exists
         toast.success("Login successful! Redirecting...")
-        // Use AuthContext to set token and user
-        login(data.token, data.user)
+        // Correctly access token and user from the nested 'session' object
+        login(data.session.access_token, data.session.user)
         // Force reload to update Nav immediately
-        window.location.href = "/";
+        window.location.href = "/"
       } else {
         toast.error(data.message || "Login failed. Please check your credentials.")
       }
@@ -92,7 +90,7 @@ const Login = () => {
         {/* Logo and Titles */}
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-          <img className="h-12 w-auto" src="/SVGs/logo.svg" alt="Awibi Institute Logo" />
+             <img src="/SVGs/logo.svg" alt="Awibi Institute Logo" />
             <div className="flex flex-col">
               <span className="font-dm-sans text-xl font-bold leading-tight text-gray-900">Awibi</span>
               <span className="font-dm-sans text-sm text-gray-600 leading-tight">Institute</span>
@@ -188,7 +186,7 @@ const Login = () => {
 
         <div className="space-y-3">
           <button className="font-dm-sans w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-            <img src='/SVGs/google.png' alt="Google logo" className="mr-2" />
+            <img src="/SVGs/google.png" alt="Google logo" className="mr-2" />
             Continue with Google
           </button>
           <button className="font-dm-sans w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">

@@ -1,6 +1,6 @@
 
-
 import { createContext, useContext, useState } from "react"
+
 
 const CartContext = createContext(undefined)
 
@@ -17,16 +17,16 @@ export const CartProvider = ({ children }) => {
         // For now, let's just return the existing items to prevent duplicates.
         return prevItems
       } else {
-        // Map course data to cart item structure
+        // Map course data to cart item structure based on new API response
         const newCartItem = {
           id: course.id,
           title: course.title,
-          image: course.videoPreview, // Using videoPreview as the image for the cart item
-          rating: course.reviews.overallRating,
-          reviews: course.reviews.totalReviews.toLocaleString(), // Format reviews count
-          instructor: course.instructor.name,
+          image: course.image || "/placeholder.svg?height=80&width=80", // Use image from course object, fallback to placeholder
+          rating: course.rating || 4.5, // Use rating from course object, fallback to dummy
+          reviews: course.reviews || "N/A", // Use reviews from course object, fallback to dummy
+          instructor: course.instructor, // Use instructor from course object
           price: course.price,
-          oldPrice: course.oldPrice,
+          oldPrice: course.oldPrice !== undefined ? course.oldPrice : null, // Ensure oldPrice is null if undefined
         }
         return [...prevItems, newCartItem]
       }
