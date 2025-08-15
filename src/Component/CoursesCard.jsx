@@ -59,7 +59,7 @@ const CourseCard = ({
   ])
 
   return (
-    <Link to={`/courses/${id}`} className="block">
+    <div>
       {" "}
       {/* Wrap the card with Link */}
       <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 w-full h-full flex flex-col">
@@ -163,7 +163,7 @@ const CourseCard = ({
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
 
