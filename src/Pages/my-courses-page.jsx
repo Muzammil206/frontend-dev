@@ -1,175 +1,129 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Nav from "../Component/Nav"
 import Footer from "../Component/Footer"
 import { useAuth } from "../context/auth-context"
-import { MoreVertical, Star, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import MyCourseCard from "../Component/my-course-card"
+import { supabase } from "../lib/supabase"
+import { Link } from "react-router-dom"
 
 const MyCoursesPage = () => {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const [activeTab, setActiveTab] = useState("All")
   const [currentPage, setCurrentPage] = useState(1)
+  const [enrolledCourses, setEnrolledCourses] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const coursesPerPage = 12
 
-  // Mock data for ongoing courses - following your existing data structure
-  const allCourses = [
-    {
-      id: 1,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: true,
-    },
-    {
-      id: 2,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design", 
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: false,
-    },
-    {
-      id: 3,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months", 
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: true,
-    },
-    {
-      id: 4,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: false,
-    },
-    {
-      id: 5,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: false,
-    },
-    {
-      id: 6,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: true,
-    },
-    {
-      id: 7,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: false,
-    },
-    {
-      id: 8,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: false,
-    },
-    {
-      id: 9,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: true,
-    },
-    {
-      id: 10,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: false,
-    },
-    {
-      id: 11,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: false,
-    },
-    {
-      id: 12,
-      title: "Typography in web design: Enhancing UI/UX web apps",
-      category: "Design",
-      duration: "3 months",
-      rating: 4.8,
-      currentLesson: 7,
-      totalLessons: 12,
-      progress: 58,
-      image: "/placeholder.svg?height=200&width=300",
-      isFavorite: true,
-    },
-  ]
+  // Fetch enrolled courses from Supabase and get course details from API
+  const fetchEnrolledCourses = async () => {
+    if (!user?.id) return
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      // First, get enrollments from Supabase
+      const { data: enrollments, error } = await supabase
+        .from("enrollments")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("payment_status", "paid")
+        .order("enrolled_at", { ascending: false })
+
+      if (error) {
+        console.error("Error fetching enrollments:", error)
+        setError("Failed to load enrolled courses")
+        return
+      }
+
+      if (!enrollments || enrollments.length === 0) {
+        setEnrolledCourses([])
+        return
+      }
+
+      // Fetch course details for each enrollment
+      const courseDetailsPromises = enrollments.map(async (enrollment, index) => {
+        try {
+          const response = await fetch(`https://lms-backend-yux4.onrender.com/api/v1/courses/${enrollment.course_id}`)
+          if (!response.ok) {
+            console.error(`Failed to fetch course ${enrollment.course_id}`)
+            return null
+          }
+          const courseData = await response.json()
+
+          if (courseData.success && courseData.data) {
+            const course = courseData.data
+
+            // Calculate total lessons from all modules and contents
+            const totalLessons = course.modules.reduce((total, module) => {
+              return total + (module.contents ? module.contents.length : 0)
+            }, 0)
+
+            // For demo purposes, generate some progress data
+            const currentLesson = Math.floor(Math.random() * totalLessons) + 1
+            const progress = Math.floor((currentLesson / totalLessons) * 100)
+
+            return {
+              id: course.id,
+              title: course.title,
+              category: course.category?.name || "Course",
+              duration: `${course.duration} hours`,
+              rating: 4.8,
+              currentLesson: currentLesson,
+              totalLessons: totalLessons,
+              progress: progress,
+              image: course.thumbnail_url || "/placeholder.svg?height=200&width=300",
+              instructor: course.instructor_name || "Unknown Instructor",
+              enrollmentDate: enrollment.enrolled_at,
+              completed: enrollment.completed,
+              level: course.level,
+              price: course.price,
+              // Store enrollment info for reference
+              enrollmentId: enrollment.id,
+              transactionId: enrollment.transaction_id,
+              amountPaid: enrollment.amount_paid,
+              isFavorite: index % 3 === 0, // Make every 3rd course a favorite for demo
+            }
+          }
+          return null
+        } catch (err) {
+          console.error(`Error fetching course details for ${enrollment.course_id}:`, err)
+          return null
+        }
+      })
+
+      const courseDetails = await Promise.all(courseDetailsPromises)
+      const validCourses = courseDetails.filter((course) => course !== null)
+
+      setEnrolledCourses(validCourses)
+    } catch (err) {
+      console.error("Error in fetchEnrolledCourses:", err)
+      setError("Failed to load enrolled courses")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Load enrolled courses when user is available
+  useEffect(() => {
+    if (user && user.id && !authLoading) {
+      fetchEnrolledCourses()
+    }
+  }, [user, authLoading])
 
   // Filter courses based on active tab
   const filteredCourses = () => {
     switch (activeTab) {
       case "Favourites":
-        return allCourses.filter(course => course.isFavorite)
+        return enrolledCourses.filter((course) => course.isFavorite)
       case "Archived":
-        return [] // No archived courses for now
+        return enrolledCourses.filter((course) => course.completed)
       default:
-        return allCourses
+        return enrolledCourses
     }
   }
 
@@ -187,7 +141,7 @@ const MyCoursesPage = () => {
   const getPageNumbers = () => {
     const pageNumbers = []
     const maxVisiblePages = 5
-    
+
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i)
@@ -218,13 +172,78 @@ const MyCoursesPage = () => {
     return pageNumbers
   }
 
+  // Show loading state
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Nav />
+        <main className="pt-28 pb-16 px-6 md:px-20">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="text-center">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mb-4"></div>
+                <p className="font-dm-sans text-gray-600">Loading your courses...</p>
+              </div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Nav />
+        <main className="pt-28 pb-16 px-6 md:px-20">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="text-center">
+                <p className="font-dm-sans text-red-500 text-lg mb-4">{error}</p>
+                <button
+                  onClick={fetchEnrolledCourses}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Nav />
       <main className="pt-28 pb-16 px-6 md:px-20">
         <div className="max-w-7xl mx-auto">
           {/* Header with User Info */}
-          
+          {/* <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-sm">A</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-dm-sans text-xl font-bold leading-tight text-gray-900">Awibi</span>
+                <span className="font-dm-sans text-sm text-gray-600 leading-tight">Institute</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <img
+                src="/placeholder.svg?height=40&width=40"
+                alt="User Avatar"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+              <span className="font-dm-sans text-lg font-medium text-gray-900">
+                {user?.user_metadata?.full_name || user?.email || "Student"}
+              </span>
+            </div>
+          </div> */}
 
           {/* Tabs */}
           <div className="border-b border-gray-200 mb-8">
@@ -249,7 +268,13 @@ const MyCoursesPage = () => {
           </div>
 
           {/* Section Title */}
-          <h1 className="font-dm-sans text-3xl font-bold text-gray-900 mb-8">Ongoing Courses</h1>
+          <h1 className="font-dm-sans text-3xl font-bold text-gray-900 mb-8">
+            {activeTab === "All"
+              ? "Ongoing Courses"
+              : activeTab === "Favourites"
+                ? "Favourite Courses"
+                : "Archived Courses"}
+          </h1>
 
           {/* Course Grid */}
           {currentCourses.length > 0 ? (
@@ -282,13 +307,27 @@ const MyCoursesPage = () => {
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {activeTab === "Favourites" ? "No favourite courses yet" : 
-                 activeTab === "Archived" ? "No archived courses" : "No courses found"}
+                {activeTab === "Favourites"
+                  ? "No favourite courses yet"
+                  : activeTab === "Archived"
+                    ? "No archived courses"
+                    : "No enrolled courses found"}
               </h3>
               <p className="text-gray-600 mb-6">
-                {activeTab === "Favourites" ? "Mark courses as favourites to see them here." :
-                 activeTab === "Archived" ? "Archived courses will appear here." : "Start learning to see your courses here."}
+                {activeTab === "Favourites"
+                  ? "Mark courses as favourites to see them here."
+                  : activeTab === "Archived"
+                    ? "Completed courses will appear here."
+                    : "Start learning by enrolling in courses."}
               </p>
+              {activeTab === "All" && (
+                <Link
+                  to="/courses"
+                  className="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors"
+                >
+                  Browse Courses
+                </Link>
+              )}
             </div>
           )}
 
@@ -307,7 +346,7 @@ const MyCoursesPage = () => {
                 <ChevronLeft className="w-4 h-4" />
                 Previous
               </button>
-              
+
               {getPageNumbers().map((pageNumber, index) => (
                 <button
                   key={index}
@@ -324,7 +363,7 @@ const MyCoursesPage = () => {
                   {pageNumber}
                 </button>
               ))}
-              
+
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}

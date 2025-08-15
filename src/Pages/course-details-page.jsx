@@ -8,12 +8,12 @@ import CourseCurriculum from "../Component/course-curriculum"
 import CourseInstructor from "../Component/course-instructor"
 import CourseReviews from "../Component/course-reviews"
 import RelatedCoursesSection from "../Component/related-courses-section"
-import { Clock, Users, Globe, Calendar, FileText, Award, Monitor, Share2, Copy, PlayCircle } from 'lucide-react'
+import { Clock, Users, Globe, Calendar, FileText, Award, Monitor, Share2, Copy, PlayCircle } from "lucide-react"
 import { useCart } from "../context/cart-context"
 import { useAuth } from "../context/auth-context"
 import { toast } from "react-hot-toast"
-import { supabase } from "../lib/supabase" 
-import { FlutterWaveButton, closePaymentModal } from 'flutterwave-react-v3';
+import { supabase } from "../lib/supabase" // Ensure this path is correct
+import { FlutterWaveButton, closePaymentModal } from "flutterwave-react-v3"
 
 const CourseDetailsPage = () => {
   const { id } = useParams()
@@ -31,70 +31,70 @@ const CourseDetailsPage = () => {
   const handleSuccessfulEnrollment = async (transactionResponse) => {
     try {
       const { data, error } = await supabase
-        .from('enrollments')
+        .from("enrollments")
         .insert([
           {
             course_id: course.id,
             user_id: user.id,
-            transaction_id: (transactionResponse.transaction_id).toLocaleString(),
-            payment_status: 'paid',
+            transaction_id: transactionResponse.transaction_id,
+            payment_status: "paid",
             amount_paid: transactionResponse.amount,
-            // currency: transactionResponse.currency,
+            currency: transactionResponse.currency,
           },
         ])
-        .select();
+        .select()
 
       if (error) {
-        console.error("Supabase enrollment error:", error);
-        toast.error("Enrollment recorded with an issue. Please contact support.");
+        console.error("Supabase enrollment error:", error)
+        toast.error("Enrollment recorded with an issue. Please contact support.")
       } else {
-        console.log("Supabase enrollment successful:", data);
-        toast.success("Payment successful! You are now enrolled.");
+        console.log("Supabase enrollment successful:", data)
+        toast.success("Payment successful! You are now enrolled.")
         // Optionally navigate to a success page or dashboard
         // navigate('/dashboard/my-courses');
       }
     } catch (dbError) {
-      console.error("Error inserting enrollment into Supabase:", dbError);
-      toast.error("An error occurred while recording your enrollment.");
+      console.error("Error inserting enrollment into Supabase:", dbError)
+      toast.error("An error occurred while recording your enrollment.")
     }
-  };
+  }
 
   const fwConfig = useMemo(() => {
     if (loading || authLoading || !course || !user || user.name === "Guest") {
-      return null;
+      return null
     }
 
     return {
-      public_key: import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY ,
+      public_key: import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY || "FLWPUBK_TEST-6a8ec6f58c946b2586f5a1f2b0d593ff-X",
       tx_ref: `course_enroll_${course.id}_${Date.now()}`,
       amount: course.price,
-      currency: 'NGN',
-      payment_options: 'card,mobilemoney,ussd',
+      currency: "NGN",
+      payment_options: "card,mobilemoney,ussd",
       customer: {
-        email: user.email || 'customer@example.com',
-        phone_number: user.user_metadata?.phone_number || '07000000000',
-        name: user.user_metadata?.full_name || user.email || 'Guest User',
+        email: user.email || "customer@example.com",
+        phone_number: user.user_metadata?.phone_number || "07000000000",
+        name: user.user_metadata?.full_name || user.email || "Guest User",
       },
       customizations: {
         title: course.title,
         description: `Payment for ${course.title} course enrollment`,
-        logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
+        logo: "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
       },
-      text: 'Enroll Now',
+      text: "Enroll Now",
       callback: (response) => {
-        console.log("Flutterwave Response:", response);
-        if (response.status === 'successful') {
-          handleSuccessfulEnrollment(response); // Call the async helper function
+        console.log("Flutterwave Response:", response)
+        if (response.status === "successful") {
+          handleSuccessfulEnrollment(response) // Call the async helper function
         } else {
-          toast.error("Payment failed or was cancelled. Please try again.");
+          toast.error("Payment failed or was cancelled. Please try again.")
         }
-        closePaymentModal();
+        closePaymentModal()
       },
       onClose: () => {
-        toast.info("Payment modal closed.");
+        toast.info("Payment modal closed.")
       },
-    };
-  }, [course, user, authLoading, loading, handleSuccessfulEnrollment]); // Add handleSuccessfulEnrollment to dependencies
+    }
+  }, [course, user, authLoading, loading]) // Removed handleSuccessfulEnrollment from dependencies
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
@@ -193,20 +193,42 @@ const CourseDetailsPage = () => {
     fetchCourseDetails()
   }, [id])
 
-  const handleAddToCart = () => {
-    if (course) {
-      addToCart({
-        id: course.id,
-        title: course.title,
-        image: course.thumbnail_url,
-        rating: course.reviews?.overallRating || 4.5,
-        reviews: course.reviews?.totalReviews?.toLocaleString() || "N/A",
-        instructor: course.instructor.name,
-        price: course.price,
-        oldPrice: course.oldPrice,
-      })
-      toast.success(`${course.title} added to cart!`)
-      navigate("/cart")
+  const handleAddToCart = async () => {
+    if (!course) {
+      toast.error("Course data not available")
+      return
+    }
+
+    if (!user || user.name === "Guest") {
+      toast.error("Please login to add items to cart")
+      navigate("/login")
+      return
+    }
+
+    // Structure the course data exactly as expected by our Supabase cart context
+    const courseForCart = {
+      id: course.id.toString(), // Ensure ID is string
+      title: course.title,
+      image: course.thumbnail_url || course.videoPreview || "/placeholder.svg?height=80&width=80",
+      rating: course.reviews?.overallRating || 4.5,
+      reviews: course.reviews?.totalReviews?.toString() || "N/A",
+      instructor: course.instructor?.name || course.instructor_name || "Unknown Instructor",
+      price: Number.parseFloat(course.price), // Ensure price is a number
+      oldPrice: course.oldPrice ? Number.parseFloat(course.oldPrice) : null,
+      // Additional fields for Supabase
+      thumbnail_url: course.thumbnail_url,
+      instructor_name: course.instructor?.name || course.instructor_name,
+    }
+
+    console.log("Adding course to cart:", courseForCart) // Debug log
+
+    try {
+      // This will automatically save to Supabase via our cart context
+      await addToCart(courseForCart)
+      // Success message and navigation are handled in the cart context
+    } catch (error) {
+      console.error("Error adding course to cart:", error)
+      toast.error("Failed to add course to cart. Please try again.")
     }
   }
 
@@ -219,7 +241,7 @@ const CourseDetailsPage = () => {
         >
           Loading...
         </button>
-      );
+      )
     }
 
     if (!user || user.name === "Guest") {
@@ -230,7 +252,7 @@ const CourseDetailsPage = () => {
         >
           Login to Enroll
         </Link>
-      );
+      )
     }
 
     if (!fwConfig) {
@@ -241,7 +263,7 @@ const CourseDetailsPage = () => {
         >
           Initializing Payment...
         </button>
-      );
+      )
     }
 
     return (
@@ -249,8 +271,8 @@ const CourseDetailsPage = () => {
         {...fwConfig}
         className="font-dm-sans w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium transition-colors"
       />
-    );
-  };
+    )
+  }
 
   if (loading) {
     return (

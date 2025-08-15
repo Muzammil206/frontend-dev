@@ -1,180 +1,142 @@
-"use client"
+
 
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Home, BookOpen, Play, FileText, CheckCircle } from 'lucide-react'
+import { ChevronLeft, ChevronDown, ChevronUp, BookOpen, Play, FileText, CheckCircle } from "lucide-react"
 import { useAuth } from "../context/auth-context"
 
 const StudyPage = () => {
   const { courseId, lessonId } = useParams()
   const navigate = useNavigate()
   const { user } = useAuth()
-  
+
   const [course, setCourse] = useState(null)
   const [currentLesson, setCurrentLesson] = useState(null)
-  const [expandedSections, setExpandedSections] = useState(["getting-started"])
+  const [expandedSections, setExpandedSections] = useState([])
   const [completedLessons, setCompletedLessons] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [activeTab, setActiveTab] = useState("Description")
 
-  // Mock course data - replace with API call
-  const mockCourse = {
-    id: courseId,
-    title: "React.js Complete Course",
-    instructor: "Thomas Wayne",
-    modules: [
-      {
-        id: "week-1",
-        title: "Week 1",
-        lessons: []
-      },
-      {
-        id: "getting-started",
-        title: "Getting Started",
-        lessons: [
-          {
-            id: "welcome",
-            title: "Welcome to the course",
-            type: "text",
-            icon: BookOpen,
-            content: {
-              title: "Welcome to the course",
-              text: `Hi ! I am Thomas Wayne, your React.js instructor for this course. Let me tell you this, I am super happy to help you understand the core basics and advance topics of React.
-
-In this course, we will cover basic as well as advance topics, a full-one guide, that will help you understand React in-depth. This will be a 4 hour course divided in 8 chapters and 36 lessons that includes articles, video lessons as well as assignments to help you test yourself.
-
-Lets start now with out getting any further late, lets dive in.`
-            }
-          },
-          {
-            id: "what-is-react",
-            title: "What is React Js ?",
-            type: "video",
-            icon: Play,
-            videoUrl: "https://www.youtube.com/watch?v=dGcsHMXbSOA"
-          },
-          {
-            id: "why-react",
-            title: "Why \"React\" but not \"JavaScript\"?",
-            type: "video", 
-            icon: Play,
-            videoUrl: "https://www.youtube.com/watch?v=dGcsHMXbSOA"
-          },
-          {
-            id: "setting-up",
-            title: "Setting up Environment",
-            type: "text",
-            icon: FileText,
-            content: {
-              title: "Setting up Environment",
-              text: "In this lesson, we'll learn how to set up your development environment for React development..."
-            }
-          }
-        ]
-      },
-      {
-        id: "javascript-refresher",
-        title: "Javascript refresher",
-        lessons: [
-          {
-            id: "js-basics",
-            title: "JavaScript Basics Review",
-            type: "video",
-            icon: Play,
-            videoUrl: "https://www.youtube.com/watch?v=dGcsHMXbSOA"
-          }
-        ]
-      },
-      {
-        id: "react-basics",
-        title: "React Basics & Working with Components",
-        lessons: [
-          {
-            id: "components-intro",
-            title: "Introduction to Components",
-            type: "video",
-            icon: Play,
-            videoUrl: "https://www.youtube.com/watch?v=dGcsHMXbSOA"
-          }
-        ]
-      },
-      {
-        id: "react-states",
-        title: "React States & Working with events",
-        lessons: []
-      },
-      {
-        id: "rendering-lists",
-        title: "Rendering listings",
-        lessons: []
-      },
-      {
-        id: "styling-components",
-        title: "Styling React Components",
-        lessons: []
-      },
-      {
-        id: "debugging",
-        title: "Debugging React Apps",
-        lessons: []
-      },
-      {
-        id: "practice-project",
-        title: "Practice : A complete project",
-        lessons: []
-      },
-      {
-        id: "assessment",
-        title: "Assessment",
-        lessons: []
-      }
-    ]
-  }
-
+  // Fetch course details from API
   useEffect(() => {
-    // Simulate API call
-    setCourse(mockCourse)
-    
-    // Find current lesson
-    if (lessonId) {
-      const lesson = findLessonById(mockCourse, lessonId)
-      setCurrentLesson(lesson)
-    } else {
-      // Default to first lesson
-      const firstLesson = mockCourse.modules
-        .find(module => module.lessons.length > 0)?.lessons[0]
-      setCurrentLesson(firstLesson)
+    const fetchCourseDetails = async () => {
+      if (!courseId) return
+
+      setLoading(true)
+      setError(null)
+
+      try {
+        const response = await fetch(`https://lms-backend-yux4.onrender.com/api/v1/courses/${courseId}`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const courseData = await response.json()
+
+        if (courseData.success && courseData.data) {
+          const courseInfo = courseData.data
+
+          // Transform the course data to match our study page structure
+          const transformedCourse = {
+            id: courseInfo.id,
+            title: courseInfo.title,
+            instructor: courseInfo.instructor_name || "Unknown Instructor",
+            modules: courseInfo.modules.map((module, moduleIndex) => ({
+              id: module.id,
+              title: module.title,
+              description: module.description,
+              position: module.position,
+              lessons: module.contents
+                ? module.contents.map((content, contentIndex) => ({
+                    id: content.id,
+                    title: content.title,
+                    type: content.content_type, // 'video', 'text', 'quiz', 'assignment'
+                    icon:
+                      content.content_type === "video"
+                        ? Play
+                        : content.content_type === "quiz"
+                          ? FileText
+                          : content.content_type === "assignment"
+                            ? FileText
+                            : BookOpen,
+                    videoUrl: content.video_url || content.video?.video_url,
+                    description: content.description,
+                    duration: content.duration || content.video?.duration,
+                    transcript: content.transcript || content.video?.transcript,
+                    thumbnailUrl: content.thumbnail_url || content.video?.thumbnail_url,
+                    position: content.position,
+                    content: {
+                      title: content.title,
+                      text: content.description || "Content will be displayed here.",
+                      videoUrl: content.video_url || content.video?.video_url,
+                      quiz: content.quiz,
+                      assignment: content.assignment,
+                    },
+                  }))
+                : [],
+            })),
+          }
+
+          setCourse(transformedCourse)
+
+          // Auto-expand first module
+          if (transformedCourse.modules.length > 0) {
+            setExpandedSections([transformedCourse.modules[0].id])
+          }
+
+          // Find current lesson or set to first lesson
+          if (lessonId) {
+            const lesson = findLessonById(transformedCourse, lessonId)
+            setCurrentLesson(lesson)
+          } else {
+            // Default to first lesson
+            const firstLesson = transformedCourse.modules.find((module) => module.lessons.length > 0)?.lessons[0]
+            if (firstLesson) {
+              setCurrentLesson(firstLesson)
+              navigate(`/study/${courseId}/${firstLesson.id}`, { replace: true })
+            }
+          }
+        } else {
+          setError("Course not found or invalid response")
+        }
+      } catch (err) {
+        console.error("Error fetching course details:", err)
+        setError(`Failed to load course: ${err.message}`)
+      } finally {
+        setLoading(false)
+      }
     }
-    
-    setLoading(false)
-  }, [courseId, lessonId])
+
+    fetchCourseDetails()
+  }, [courseId, lessonId, navigate])
 
   const findLessonById = (course, lessonId) => {
     for (const module of course.modules) {
-      const lesson = module.lessons.find(l => l.id === lessonId)
+      const lesson = module.lessons.find((l) => l.id === lessonId)
       if (lesson) return lesson
     }
     return null
   }
 
   const getAllLessons = () => {
-    return course?.modules.flatMap(module => module.lessons) || []
+    return course?.modules.flatMap((module) => module.lessons) || []
   }
 
   const getCurrentLessonIndex = () => {
     const allLessons = getAllLessons()
-    return allLessons.findIndex(lesson => lesson.id === currentLesson?.id)
+    return allLessons.findIndex((lesson) => lesson.id === currentLesson?.id)
   }
 
   const navigateToLesson = (direction) => {
     const allLessons = getAllLessons()
     const currentIndex = getCurrentLessonIndex()
-    
-    if (direction === 'prev' && currentIndex > 0) {
+
+    if (direction === "prev" && currentIndex > 0) {
       const prevLesson = allLessons[currentIndex - 1]
       setCurrentLesson(prevLesson)
       navigate(`/study/${courseId}/${prevLesson.id}`)
-    } else if (direction === 'next' && currentIndex < allLessons.length - 1) {
+    } else if (direction === "next" && currentIndex < allLessons.length - 1) {
       const nextLesson = allLessons[currentIndex + 1]
       setCurrentLesson(nextLesson)
       navigate(`/study/${courseId}/${nextLesson.id}`)
@@ -182,28 +144,28 @@ Lets start now with out getting any further late, lets dive in.`
   }
 
   const toggleSection = (sectionId) => {
-    setExpandedSections(prev => 
-      prev.includes(sectionId) 
-        ? prev.filter(id => id !== sectionId)
-        : [...prev, sectionId]
+    setExpandedSections((prev) =>
+      prev.includes(sectionId) ? prev.filter((id) => id !== sectionId) : [...prev, sectionId],
     )
   }
 
   const markAsComplete = () => {
     if (currentLesson && !completedLessons.includes(currentLesson.id)) {
-      setCompletedLessons(prev => [...prev, currentLesson.id])
+      setCompletedLessons((prev) => [...prev, currentLesson.id])
       // Here you would also save to backend/database
+      console.log(`Marked lesson ${currentLesson.id} as complete`)
     }
   }
 
   const extractYouTubeId = (url) => {
+    if (!url) return null
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
-    const match = url?.match(regExp)
-    return (match && match[2].length === 11) ? match[2] : null
+    const match = url.match(regExp)
+    return match && match[2].length === 11 ? match[2] : null
   }
 
   const renderVideoPlayer = () => {
-    if (!currentLesson || currentLesson.type !== 'video' || !currentLesson.videoUrl) {
+    if (!currentLesson || currentLesson.type !== "video" || !currentLesson.content?.videoUrl) {
       return (
         <div className="aspect-video w-full bg-gray-900 rounded-lg flex items-center justify-center">
           <div className="text-center text-gray-400">
@@ -214,7 +176,7 @@ Lets start now with out getting any further late, lets dive in.`
       )
     }
 
-    const videoId = extractYouTubeId(currentLesson.videoUrl)
+    const videoId = extractYouTubeId(currentLesson.content.videoUrl)
     return (
       <div className="aspect-video w-full bg-gray-900 rounded-lg overflow-hidden">
         {videoId ? (
@@ -230,7 +192,11 @@ Lets start now with out getting any further late, lets dive in.`
           ></iframe>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-white">
-            <Play className="w-16 h-16 opacity-50" />
+            <div className="text-center">
+              <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p>Video player will load here</p>
+              <p className="text-sm opacity-75 mt-2">URL: {currentLesson.content.videoUrl}</p>
+            </div>
           </div>
         )}
       </div>
@@ -243,18 +209,29 @@ Lets start now with out getting any further late, lets dive in.`
         return (
           <div className="p-6">
             <h2 className="font-dm-sans text-2xl font-bold text-gray-900 mb-6">
-              {currentLesson?.content?.title || currentLesson?.title || "Welcome to the course"}
+              {currentLesson?.content?.title || currentLesson?.title || "Lesson Content"}
             </h2>
             <div className="font-dm-sans text-gray-700 leading-relaxed whitespace-pre-line">
-              {currentLesson?.content?.text || currentLesson?.title || "Course content will be displayed here."}
+              {currentLesson?.content?.text || currentLesson?.description || "Lesson content will be displayed here."}
             </div>
+            {currentLesson?.duration && (
+              <div className="mt-4 text-sm text-gray-600">
+                <strong>Duration:</strong> {currentLesson.duration}
+              </div>
+            )}
           </div>
         )
       case "Lectures Notes":
         return (
           <div className="p-6">
             <h3 className="font-dm-sans text-xl font-bold text-gray-900 mb-4">Lecture Notes</h3>
-            <p className="font-dm-sans text-gray-600">No notes available for this lesson yet.</p>
+            {currentLesson?.transcript ? (
+              <div className="font-dm-sans text-gray-700 leading-relaxed whitespace-pre-line">
+                {currentLesson.transcript}
+              </div>
+            ) : (
+              <p className="font-dm-sans text-gray-600">No notes available for this lesson yet.</p>
+            )}
           </div>
         )
       case "Resources":
@@ -294,7 +271,34 @@ Lets start now with out getting any further late, lets dive in.`
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="font-dm-sans text-lg text-gray-700">Loading course...</p>
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mb-4"></div>
+          <p className="font-dm-sans text-lg text-gray-700">Loading course...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <p className="font-dm-sans text-lg text-red-500 mb-4">{error}</p>
+          <button
+            onClick={() => navigate("/my-courses")}
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium"
+          >
+            Back to My Courses
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!course) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p className="font-dm-sans text-lg text-gray-700">Course not found.</p>
       </div>
     )
   }
@@ -311,32 +315,34 @@ Lets start now with out getting any further late, lets dive in.`
         <div className="w-80 bg-white border-r border-gray-200 min-h-screen flex flex-col">
           {/* Course Header */}
           <div className="p-6 border-b border-gray-200">
-            <h3 className="font-dm-sans text-lg font-bold text-blue-600 mb-2">Week 1</h3>
+            <h3 className="font-dm-sans text-lg font-bold text-blue-600 mb-2">{course.title}</h3>
+            <p className="font-dm-sans text-sm text-gray-600">by {course.instructor}</p>
           </div>
 
           {/* Course Modules */}
           <div className="flex-1 overflow-y-auto">
-            {course?.modules.map((module) => (
+            {course.modules.map((module) => (
               <div key={module.id} className="border-b border-gray-100">
                 <button
                   onClick={() => toggleSection(module.id)}
                   className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50"
                 >
                   <span className="font-dm-sans font-medium text-gray-900">{module.title}</span>
-                  {module.lessons.length > 0 && (
-                    expandedSections.includes(module.id) ? 
-                      <ChevronUp className="w-4 h-4 text-gray-500" /> : 
+                  {module.lessons.length > 0 &&
+                    (expandedSections.includes(module.id) ? (
+                      <ChevronUp className="w-4 h-4 text-gray-500" />
+                    ) : (
                       <ChevronDown className="w-4 h-4 text-gray-500" />
-                  )}
+                    ))}
                 </button>
-                
+
                 {expandedSections.includes(module.id) && (
                   <div className="pb-2">
                     {module.lessons.map((lesson) => {
                       const IconComponent = lesson.icon
                       const isCompleted = completedLessons.includes(lesson.id)
                       const isCurrent = currentLesson?.id === lesson.id
-                      
+
                       return (
                         <button
                           key={lesson.id}
@@ -345,22 +351,22 @@ Lets start now with out getting any further late, lets dive in.`
                             navigate(`/study/${courseId}/${lesson.id}`)
                           }}
                           className={`w-full px-6 py-3 text-left flex items-center gap-3 hover:bg-gray-50 ${
-                            isCurrent ? 'bg-blue-50 border-r-2 border-blue-600' : ''
+                            isCurrent ? "bg-blue-50 border-r-2 border-blue-600" : ""
                           }`}
                         >
                           <div className="flex items-center gap-3 flex-1">
-                            <IconComponent className={`w-4 h-4 ${
-                              lesson.type === 'video' ? 'text-blue-600' : 'text-gray-600'
-                            }`} />
-                            <span className={`font-dm-sans text-sm ${
-                              isCurrent ? 'text-blue-600 font-medium' : 'text-gray-700'
-                            }`}>
+                            <IconComponent
+                              className={`w-4 h-4 ${lesson.type === "video" ? "text-blue-600" : "text-gray-600"}`}
+                            />
+                            <span
+                              className={`font-dm-sans text-sm ${
+                                isCurrent ? "text-blue-600 font-medium" : "text-gray-700"
+                              }`}
+                            >
                               {lesson.title}
                             </span>
                           </div>
-                          {isCompleted && (
-                            <CheckCircle className="w-4 h-4 text-green-600" />
-                          )}
+                          {isCompleted && <CheckCircle className="w-4 h-4 text-green-600" />}
                         </button>
                       )
                     })}
@@ -377,38 +383,38 @@ Lets start now with out getting any further late, lets dive in.`
           <div className="bg-white border-b border-gray-200 px-6 py-4">
             <div className="flex items-center justify-between">
               <button
-                onClick={() => navigate('/my-courses')}
+                onClick={() => navigate("/my-courses")}
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-dm-sans text-sm"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Go Home
               </button>
-              
+
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => navigateToLesson('prev')}
+                  onClick={() => navigateToLesson("prev")}
                   disabled={!canGoPrev}
                   className={`px-4 py-2 rounded-lg font-dm-sans text-sm font-medium ${
-                    canGoPrev 
-                      ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' 
-                      : 'bg-gray-50 text-gray-400 cursor-not-allowed'
+                    canGoPrev
+                      ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      : "bg-gray-50 text-gray-400 cursor-not-allowed"
                   }`}
                 >
                   Prev
                 </button>
-                
+
                 <button
-                  onClick={() => navigateToLesson('next')}
+                  onClick={() => navigateToLesson("next")}
                   disabled={!canGoNext}
                   className={`px-4 py-2 rounded-lg font-dm-sans text-sm font-medium ${
-                    canGoNext 
-                      ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' 
-                      : 'bg-gray-50 text-gray-400 cursor-not-allowed'
+                    canGoNext
+                      ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      : "bg-gray-50 text-gray-400 cursor-not-allowed"
                   }`}
                 >
                   Next
                 </button>
-                
+
                 <button
                   onClick={markAsComplete}
                   className="px-4 py-2 bg-green-600 text-white rounded-lg font-dm-sans text-sm font-medium hover:bg-green-700"
@@ -421,9 +427,7 @@ Lets start now with out getting any further late, lets dive in.`
 
           {/* Video Section */}
           <div className="flex-1 bg-gray-100">
-            <div className="p-6">
-              {renderVideoPlayer()}
-            </div>
+            <div className="p-6">{renderVideoPlayer()}</div>
           </div>
 
           {/* Tabs and Content Section */}
@@ -448,9 +452,7 @@ Lets start now with out getting any further late, lets dive in.`
             </div>
 
             {/* Tab Content */}
-            <div className="min-h-[300px]">
-              {renderTabContent()}
-            </div>
+            <div className="min-h-[300px]">{renderTabContent()}</div>
           </div>
         </div>
       </div>

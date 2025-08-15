@@ -102,7 +102,7 @@ const Nav = ({ bg = "#050829" }) => {
             <div className="text-white">Loading...</div>
           ) : token ? ( // Check if user is logged in (token exists)
             <>
-              <Link to="/profile" className="flex items-center gap-2 text-white hover:text-green-400 transition-colors">
+              <Link to="/dashboard" className="flex items-center gap-2 text-white hover:text-green-400 transition-colors">
                 <UserCircle className="w-8 h-8" />
                 <span className="font-medium">{user.name || "User"}</span>
               </Link>

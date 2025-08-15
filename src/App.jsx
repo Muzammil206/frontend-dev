@@ -35,7 +35,7 @@ function App() {
            <Route path="/cart" element={<CartPage />} />
           <Route path="/dashboard" element={<StudentDashboard />} />
           <Route path="/my-courses" element={<MyCoursesPage />} />
-          <Route path="/study/:courseId" element={<StudyPage />} />
+          <Route path="/study/:courseId/:lessonId" element={<StudyPage />} />
           <Route path="/programs" element={<Programs />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/resources/:id" element={<Eachresourcesdetails />} />

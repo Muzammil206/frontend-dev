@@ -1,11 +1,23 @@
-
 import { Star, XCircle } from "lucide-react"
+import { useCart } from "../context/cart-context"
 
 const CartItem = ({ item, onRemove }) => {
+  const { loading } = useCart()
+
+  const handleRemove = () => {
+    if (onRemove) {
+      onRemove(item.id)
+    }
+  }
+
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm border border-gray-100">
       {/* Remove Button */}
-      <button onClick={() => onRemove(item.id)} className="text-gray-400 hover:text-red-500 transition-colors">
+      <button
+        onClick={handleRemove}
+        disabled={loading}
+        className="text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
+      >
         <XCircle className="w-6 h-6" />
       </button>
 
@@ -25,7 +37,7 @@ const CartItem = ({ item, onRemove }) => {
         <div className="flex items-center gap-1 text-yellow-500 mb-1">
           <Star className="h-4 w-4 fill-current" />
           <span className="font-dm-sans text-sm font-medium text-gray-700">
-            {item.rating} ({item.reviews} Review)
+            {item.rating} ({item.reviews} Review{item.reviews !== "1" ? "s" : ""})
           </span>
         </div>
         <p className="font-dm-sans text-sm text-gray-600">
@@ -35,9 +47,9 @@ const CartItem = ({ item, onRemove }) => {
 
       {/* Price */}
       <div className="flex flex-col items-end">
-        <span className="font-dm-sans text-lg font-bold text-gray-900">N {item.price.toLocaleString()}</span>
+        <span className="font-dm-sans text-lg font-bold text-gray-900">N {item.price?.toLocaleString()}</span>
         {item.oldPrice && (
-          <span className="font-dm-sans text-sm text-gray-500 line-through">N {item.oldPrice.toLocaleString()}</span>
+          <span className="font-dm-sans text-sm text-gray-500 line-through">N {item.oldPrice?.toLocaleString()}</span>
         )}
       </div>
     </div>

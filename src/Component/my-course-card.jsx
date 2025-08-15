@@ -59,7 +59,7 @@ const MyCourseCard = ({
 
         {/* Continue Learning Button */}
         <Link
-          to={`/study/${id}`}
+          to={`/study/${id} /${currentLesson}`}
           className="font-dm-sans bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium text-center transition-colors"
         >
           Continue learning

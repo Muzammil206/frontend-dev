@@ -1,15 +1,41 @@
 
-
 import { useState } from "react"
 
+import { useCart } from "../context/cart-context"
 
-const CartSummary = ({ subtotal, couponDiscount, taxes, total, onApplyCoupon }) => {
+const CartSummary = ({ onApplyCoupon }) => {
   const [couponCode, setCouponCode] = useState("")
+  const [couponDiscount, setCouponDiscount] = useState(0)
+  const { getCartTotal, loading } = useCart()
+
+  const subtotal = getCartTotal()
+  const taxes = 17.99 // Fixed dummy tax
+  const discountAmount = (subtotal * couponDiscount) / 100
+  const total = subtotal - discountAmount + taxes
 
   const handleApply = () => {
-    if (onApplyCoupon) {
-      onApplyCoupon(couponCode)
+    // Simple coupon validation
+    if (couponCode === "AWIBI20") {
+      setCouponDiscount(20)
+      if (onApplyCoupon) {
+        onApplyCoupon(couponCode)
+      }
+      alert("20% discount applied!")
+    } else if (couponCode === "SAVE10") {
+      setCouponDiscount(10)
+      if (onApplyCoupon) {
+        onApplyCoupon(couponCode)
+      }
+      alert("10% discount applied!")
+    } else if (couponCode.trim()) {
+      setCouponDiscount(0)
+      alert("Invalid coupon code")
     }
+  }
+
+  const handleClearCoupon = () => {
+    setCouponCode("")
+    setCouponDiscount(0)
   }
 
   return (
@@ -21,30 +47,38 @@ const CartSummary = ({ subtotal, couponDiscount, taxes, total, onApplyCoupon }) 
           <span className="font-dm-sans text-sm text-gray-600">Subtotal</span>
           <span className="font-dm-sans text-sm font-medium text-gray-900">N {subtotal.toLocaleString()}</span>
         </div>
-        <div className="flex justify-between items-center">
-          <span className="font-dm-sans text-sm text-gray-600">Coupon Discount</span>
-          <span className="font-dm-sans text-sm font-medium text-red-500">-{couponDiscount}%</span>
-        </div>
+
+        {couponDiscount > 0 && (
+          <div className="flex justify-between items-center">
+            <span className="font-dm-sans text-sm text-gray-600">Coupon Discount ({couponDiscount}%)</span>
+            <span className="font-dm-sans text-sm font-medium text-red-500">-N {discountAmount.toLocaleString()}</span>
+          </div>
+        )}
+
         <div className="flex justify-between items-center">
           <span className="font-dm-sans text-sm text-gray-600">Taxes</span>
-          <span className="font-dm-sans text-sm font-medium text-gray-900">${taxes.toFixed(2)} USD</span>
+          <span className="font-dm-sans text-sm font-medium text-gray-900">N {taxes.toFixed(2)}</span>
         </div>
+
         <div className="flex justify-between items-center pt-3 border-t border-gray-200">
           <span className="font-dm-sans text-lg font-bold text-gray-900">Total:</span>
           <span className="font-dm-sans text-lg font-bold text-gray-900">N {total.toLocaleString()}</span>
         </div>
       </div>
 
-      <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium transition-colors mb-6">
-        Complete Payment
+      <button
+        className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium transition-colors mb-6"
+        disabled={loading || subtotal === 0}
+      >
+        {loading ? "Processing..." : "Complete Payment"}
       </button>
 
       <div>
         <h4 className="font-dm-sans text-base font-bold text-gray-900 mb-3">Apply coupon code</h4>
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-2">
           <input
             type="text"
-            placeholder="Coupon code"
+            placeholder="Enter coupon code"
             value={couponCode}
             onChange={(e) => setCouponCode(e.target.value)}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
@@ -52,10 +86,22 @@ const CartSummary = ({ subtotal, couponDiscount, taxes, total, onApplyCoupon }) 
           <button
             onClick={handleApply}
             className="bg-[#050829] hover:bg-[#1a2332] text-white px-6 py-2 rounded-lg font-medium transition-colors"
+            disabled={loading}
           >
             Apply
           </button>
         </div>
+
+        {couponDiscount > 0 && (
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-green-600">Coupon "{couponCode}" applied!</span>
+            <button onClick={handleClearCoupon} className="text-red-600 hover:text-red-700 underline">
+              Remove
+            </button>
+          </div>
+        )}
+
+        <div className="mt-2 text-xs text-gray-500">Try: AWIBI20 (20% off) or SAVE10 (10% off)</div>
       </div>
     </div>
   )
