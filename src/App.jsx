@@ -17,6 +17,7 @@ import Events from "./Pages/events/Events";
 import CartPage from "./Pages/cart-page";
 import MyCoursesPage from "./Pages/my-courses-page";
 import StudyPage from "./Pages/study-page";
+import RegistrationSuccess from "./Pages/registration-success";
 import { AuthProvider } from "./context/auth-context";
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/registration-success" element={<RegistrationSuccess />} />
           <Route path="/forgetpassword" element={<Forgetpassword />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/courses" element={<CoursesPage />} />
@@ -38,6 +40,7 @@ function App() {
           <Route path="/study/:courseId/:lessonId" element={<StudyPage />} />
           <Route path="/programs" element={<Programs />} />
           <Route path="/resources" element={<Resources />} />
+
           <Route path="/resources/:id" element={<Eachresourcesdetails />} />
           <Route path="/contact-us" element={<ContactUSPage />} />
           <Route path="/events" element={<Events />} />

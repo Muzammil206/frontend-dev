@@ -89,7 +89,7 @@ const Register = () => {
 
       if (data.success) {
         toast.success("Account created successfully! Redirecting to login...")
-        navigate("/Login")
+         window.location.href = "/#/registration-success" // Redirect to success page
       } else {
         toast.error(data.message || "Registration failed. Please try again.")
       }
@@ -98,6 +98,8 @@ const Register = () => {
       toast.error("An error occurred while creating your account. Please try again.")
     } finally {
       setIsSubmitting(false)
+
+
     }
   }
 
