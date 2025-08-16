@@ -72,7 +72,7 @@ const Login = () => {
         // Correctly access token and user from the nested 'session' object
         login(data.session.access_token, data.session.user)
         // Force reload to update Nav immediately
-        window.location.href = "/#/student-dashboard"
+        window.location.href = "/#/dashboard"
       } else {
         toast.error(data.message || "Login failed. Please check your credentials.")
       }
